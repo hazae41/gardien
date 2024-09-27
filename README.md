@@ -30,7 +30,7 @@ const RpcRequestGuard = {
 } as const
 
 function onMessage(message: string) {
-  const request = Guard.asOrThrow(RpcRequestGuard, message)
+  const request = Guard.asOrThrow(RpcRequestGuard, JSON.parse(message))
 
   if (request.method === "example")
     return void example(request)
