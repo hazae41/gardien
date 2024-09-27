@@ -33,7 +33,7 @@ function onMessage(message: string) {
   const request = Guard.asOrThrow(RpcRequestGuard, message)
 
   if (request.method === "example")
-    example(request)
+    return void example(request)
   
   throw new Error("Unknown method")
 }
