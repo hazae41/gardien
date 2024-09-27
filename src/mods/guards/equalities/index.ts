@@ -1,4 +1,3 @@
-import { Override, Super } from "mods/super/index.js"
 
 export class StrongEqualityGuard<T> {
 
@@ -6,10 +5,9 @@ export class StrongEqualityGuard<T> {
     readonly value: T
   ) { }
 
-  asOrThrow<X extends T>(value: X): X
+  asOrThrow(value: unknown): T
 
-  // @ts-ignore
-  asOrThrow<X>(value: Super<X, Override<X, T>>): Override<X, T>
+  asOrThrow(value: T): T
 
   asOrThrow(value: unknown): T {
     if (value !== this.value)
@@ -25,10 +23,9 @@ export class WeakEqualityGuard<T> {
     readonly value: T
   ) { }
 
-  asOrThrow<X extends T>(value: X): X
+  asOrThrow(value: unknown): T
 
-  // @ts-ignore
-  asOrThrow<X>(value: Super<X, Override<X, T>>): Override<X, T>
+  asOrThrow(value: T): T
 
   asOrThrow(value: unknown): T {
     if (value != this.value)

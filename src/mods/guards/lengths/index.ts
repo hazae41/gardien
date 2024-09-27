@@ -1,4 +1,3 @@
-import { Override, Super } from "mods/super/index.js"
 
 export class LengthGuard<T extends { length: number }, N extends number> {
 
@@ -6,10 +5,9 @@ export class LengthGuard<T extends { length: number }, N extends number> {
     readonly length: N
   ) { }
 
-  asOrThrow<X extends T & { length: N }>(value: X): X
+  asOrThrow(value: T): T & { length: N }
 
-  // @ts-ignore
-  asOrThrow<X extends T>(value: Super<X, Override<X, T & { length: N }>>): Override<X, T & { length: N }>
+  asOrThrow(value: T & { length: N }): T & { length: N }
 
   asOrThrow(value: T): T & { length: N } {
     if (value.length !== this.length)
@@ -18,8 +16,6 @@ export class LengthGuard<T extends { length: number }, N extends number> {
   }
 
 }
-
-new LengthGuard(1).asOrThrow([null] as const)
 
 declare const MinSymbol: unique symbol
 
@@ -33,9 +29,9 @@ export class MinLengthGuard<T extends { length: number }, N extends number> {
     readonly length: N
   ) { }
 
-  asOrThrow<X extends T & { length: Min<N> }>(value: X): X
+  asOrThrow(value: T): T & { length: Min<N> }
 
-  asOrThrow<X extends T>(value: Super<X, Override<X, T & { length: Min<N> }>>): Override<X, T & { length: Min<N> }>
+  asOrThrow(value: T & { length: Min<N> }): T & { length: Min<N> }
 
   asOrThrow(value: T): T & { length: Min<N> } {
     if (value.length < this.length)
@@ -57,9 +53,9 @@ export class MaxLengthGuard<T extends { length: number }, N extends number> {
     readonly length: N
   ) { }
 
-  asOrThrow<X extends T & { length: Max<N> }>(value: X): X
+  asOrThrow(value: T): T & { length: Max<N> }
 
-  asOrThrow<X extends T>(value: Super<X, Override<X, T & { length: Max<N> }>>): Override<X, T & { length: Max<N> }>
+  asOrThrow(value: T & { length: Max<N> }): T & { length: Max<N> }
 
   asOrThrow(value: T): T & { length: Max<N> } {
     if (value.length > this.length)

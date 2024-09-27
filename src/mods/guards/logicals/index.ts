@@ -1,16 +1,15 @@
 import { Guard } from "mods/guard/index.js"
 import { ArrayGuard, ElementsGuard } from "mods/guards/arrays/index.js"
 import { StringGuard } from "mods/guards/strings/index.js"
-import { Override, Super } from "mods/super/index.js"
 
-export class UnionGuard<I, A, B> {
+export class UnionGuard<W, S extends W, A, B> {
 
   constructor(
-    readonly left: Guard<I, A>,
-    readonly right: Guard<I, B>
+    readonly left: Guard.Overloaded<W, S, A>,
+    readonly right: Guard.Overloaded<W, S, B>
   ) { }
 
-  asOrThrow(value: I): (A | B) {
+  asOrThrow(value: W): (A | B) {
     let cause = []
 
     try {
@@ -30,21 +29,28 @@ export class UnionGuard<I, A, B> {
 
 }
 
-export class InterGuard<A extends Guard.Overloaded<any, any, any>, B extends Guard.Overloaded<Guard.Overloaded.Output<A>, Guard.Overloaded.Output<A>, any>> {
+export class InterGuard<W, S extends W, M, O> {
 
   constructor(
-    readonly left: A,
-    readonly right: B
+    readonly left: Guard.Overloaded<W, S, M>,
+    readonly right: Guard.Overloaded<M, M, O>
   ) { }
 
-  asOrThrow<X extends Guard.Overloaded.Strong<B>>(value: X): Guard.Overloaded.Output<B>
-
-  asOrThrow<X extends Guard.Overloaded.Weak<A>>(value: Super<X, Override<X, Required<Guard.Overloaded.Strong<B>>>>): Guard.Overloaded.Output<B>
-
-  asOrThrow(value: Guard.Overloaded.Weak<A>): Guard.Overloaded.Output<B> {
+  asOrThrow(value: W): O {
     return this.right.asOrThrow(this.left.asOrThrow(value))
   }
 
 }
 
 new InterGuard(ArrayGuard, new ElementsGuard(StringGuard)).asOrThrow([null as unknown] as const)
+
+function test<T extends Guard.Overloaded<unknown, string, number>>(guard: T) {
+
+}
+
+// function infer<T extends Guard<string, number>>(guard: T): Guard.Output<T> {
+//   return guard.asOrThrow("")
+// }
+
+test(StringGuard)
+

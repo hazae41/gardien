@@ -30,9 +30,9 @@ export class StringGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends string>(value: X): X
+  static asOrThrow(value: unknown): string
 
-  static asOrThrow<X>(value: Super<X, string>): string
+  static asOrThrow(value: string): string
 
   static asOrThrow(value: unknown): string {
     if (typeof value !== "string")
@@ -40,9 +40,9 @@ export class StringGuard {
     return value
   }
 
-  asOrThrow<X extends string>(value: X): X
+  asOrThrow(value: unknown): string
 
-  asOrThrow<X>(value: Super<X, string>): string
+  asOrThrow(value: string): string
 
   asOrThrow(value: unknown): string {
     if (typeof value !== "string")
@@ -62,7 +62,7 @@ export class StringGuardBuilder<T extends Guard.Overloaded<unknown, unknown, str
 
   asOrThrow<X extends Guard.Overloaded.Weak<T>>(value: Super<X, Override<X, Required<Guard.Overloaded.Strong<T>>>>): Guard.Overloaded.Output<T>
 
-  asOrThrow(this: StringGuardBuilder<Guard.Overloaded.Infer<T>>, value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
+  asOrThrow(this: StringGuardBuilder<T>, value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
     return this.guard.asOrThrow(value)
   }
 

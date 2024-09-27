@@ -1,12 +1,11 @@
-import { Super } from "mods/super/index.js"
 
 export class BooleanGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends boolean>(value: X): X
+  static asOrThrow(value: unknown): boolean
 
-  static asOrThrow<X>(value: Super<X, boolean>): boolean
+  static asOrThrow(value: boolean): boolean
 
   static asOrThrow(value: unknown): boolean {
     if (typeof value !== "boolean")
@@ -14,9 +13,9 @@ export class BooleanGuard {
     return value
   }
 
-  asOrThrow<X extends boolean>(value: X): X
+  asOrThrow(value: unknown): boolean
 
-  asOrThrow<X>(value: Super<X, boolean>): boolean
+  asOrThrow(value: boolean): boolean
 
   asOrThrow(value: unknown): boolean {
     if (typeof value !== "boolean")
@@ -30,9 +29,9 @@ export class TrueGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends true>(value: X): X
+  static asOrThrow(value: unknown): true
 
-  static asOrThrow<X>(value: Super<X, true>): true
+  static asOrThrow(value: true): true
 
   static asOrThrow(value: unknown): true {
     if (value !== true)
@@ -40,9 +39,9 @@ export class TrueGuard {
     return value
   }
 
-  asOrThrow<X extends true>(value: X): X
+  asOrThrow(value: unknown): true
 
-  asOrThrow<X>(value: Super<X, true>): true
+  asOrThrow(value: true): true
 
   asOrThrow(value: unknown): true {
     if (value !== true)
@@ -56,9 +55,9 @@ export class FalseGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends false>(value: X): X
+  static asOrThrow(value: unknown): false
 
-  static asOrThrow<X>(value: Super<X, false>): false
+  static asOrThrow(value: false): false
 
   static asOrThrow(value: unknown): false {
     if (value !== false)
@@ -66,9 +65,9 @@ export class FalseGuard {
     return value
   }
 
-  asOrThrow<X extends false>(value: X): X
+  asOrThrow(value: unknown): false
 
-  asOrThrow<X>(value: Super<X, false>): false
+  asOrThrow(value: false): false
 
   asOrThrow(value: unknown): false {
     if (value !== false)
@@ -82,9 +81,9 @@ export class NumberGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends number>(value: X): X
+  static asOrThrow(value: unknown): number
 
-  static asOrThrow<X>(value: Super<X, number>): number
+  static asOrThrow(value: number): number
 
   static asOrThrow(value: unknown): number {
     if (typeof value !== "number")
@@ -92,9 +91,9 @@ export class NumberGuard {
     return value
   }
 
-  asOrThrow<X extends number>(value: X): X
+  asOrThrow(value: unknown): number
 
-  asOrThrow<X>(value: Super<X, number>): number
+  asOrThrow(value: number): number
 
   asOrThrow(value: unknown): number {
     if (typeof value !== "number")
@@ -122,9 +121,9 @@ export class BigIntGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends bigint>(value: X): X
+  static asOrThrow(value: unknown): bigint
 
-  static asOrThrow<X>(value: Super<X, bigint>): bigint
+  static asOrThrow(value: bigint): bigint
 
   static asOrThrow(value: unknown): bigint {
     if (typeof value !== "bigint")
@@ -132,9 +131,9 @@ export class BigIntGuard {
     return value
   }
 
-  asOrThrow<X extends bigint>(value: X): X
+  asOrThrow(value: unknown): bigint
 
-  asOrThrow<X>(value: Super<X, bigint>): bigint
+  asOrThrow(value: bigint): bigint
 
   asOrThrow(value: unknown): bigint {
     if (typeof value !== "bigint")
@@ -162,9 +161,9 @@ export class ObjectGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends object>(value: X): X
+  static asOrThrow(value: unknown): object
 
-  static asOrThrow<X>(value: Super<X, object>): object
+  static asOrThrow(value: object): object
 
   static asOrThrow(value: unknown): object {
     if (typeof value !== "object")
@@ -174,9 +173,9 @@ export class ObjectGuard {
     return value
   }
 
-  asOrThrow<X extends object>(value: X): X
+  asOrThrow(value: unknown): object
 
-  asOrThrow<X>(value: Super<X, object>): object
+  asOrThrow(value: object): object
 
   asOrThrow(value: unknown): object {
     if (typeof value !== "object")
@@ -192,9 +191,9 @@ export class FunctionGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends Function>(value: X): X
+  static asOrThrow(value: unknown): Function
 
-  static asOrThrow<X>(value: Super<X, Function>): Function
+  static asOrThrow(value: Function): Function
 
   static asOrThrow(value: unknown): Function {
     if (typeof value !== "function")
@@ -202,9 +201,9 @@ export class FunctionGuard {
     return value
   }
 
-  asOrThrow<X extends Function>(value: X): X
+  asOrThrow(value: unknown): Function
 
-  asOrThrow<X>(value: Super<X, Function>): Function
+  asOrThrow(value: Function): Function
 
   asOrThrow(value: unknown): Function {
     if (typeof value !== "function")
@@ -218,9 +217,9 @@ export class SymbolGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends symbol>(value: X): X
+  static asOrThrow(value: unknown): symbol
 
-  static asOrThrow<X>(value: Super<X, symbol>): symbol
+  static asOrThrow(value: symbol): symbol
 
   static asOrThrow(value: unknown): symbol {
     if (typeof value !== "symbol")
@@ -228,9 +227,9 @@ export class SymbolGuard {
     return value
   }
 
-  asOrThrow<X extends symbol>(value: X): X
+  asOrThrow(value: unknown): symbol
 
-  asOrThrow<X>(value: Super<X, symbol>): symbol
+  asOrThrow(value: symbol): symbol
 
   asOrThrow(value: unknown): symbol {
     if (typeof value !== "symbol")

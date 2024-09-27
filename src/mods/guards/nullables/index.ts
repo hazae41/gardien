@@ -1,12 +1,11 @@
-import { Super } from "mods/super/index.js"
 
 export class NullGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends null>(value: X): X
+  static asOrThrow(value: unknown): null
 
-  static asOrThrow<X>(value: Super<X, null>): null
+  static asOrThrow(value: null): null
 
   static asOrThrow(value: unknown): null {
     if (value !== null)
@@ -14,9 +13,9 @@ export class NullGuard {
     return value
   }
 
-  asOrThrow<X extends null>(value: X): X
+  asOrThrow(value: unknown): null
 
-  asOrThrow<X>(value: Super<X, null>): null
+  asOrThrow(value: null): null
 
   asOrThrow(value: unknown): null {
     if (value !== null)
@@ -30,9 +29,9 @@ export class UndefinedGuard {
 
   constructor() { }
 
-  static asOrThrow<X extends undefined>(value: X): X
+  static asOrThrow(value: unknown): undefined
 
-  static asOrThrow<X>(value: Super<X, undefined>): undefined
+  static asOrThrow(value: undefined): undefined
 
   static asOrThrow(value: unknown): undefined {
     if (value !== undefined)
@@ -40,16 +39,15 @@ export class UndefinedGuard {
     return value
   }
 
-  asOrThrow<X extends undefined>(value: X): X
+  asOrThrow(value: unknown): undefined
 
-  asOrThrow<X>(value: Super<X, undefined>): undefined
+  asOrThrow(value: undefined): undefined
 
   asOrThrow(value: unknown): undefined {
     if (value !== undefined)
       throw new Error()
     return value
   }
-
 }
 
 export class NonNullableGuard {
