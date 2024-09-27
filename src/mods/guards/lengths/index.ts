@@ -1,4 +1,4 @@
-import { Override, Super } from "../../super"
+import { Override, Super } from "mods/super/index.js"
 
 export class LengthGuard<T extends { length: number }, N extends number> {
 

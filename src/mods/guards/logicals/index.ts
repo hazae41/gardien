@@ -1,7 +1,7 @@
-import { Guard } from "../../guard"
-import { Override, Super } from "../../super"
-import { ArrayGuard, ElementsGuard } from "../arrays"
-import { StringGuard } from "../strings"
+import { Guard } from "mods/guard/index.js"
+import { ArrayGuard, ElementsGuard } from "mods/guards/arrays/index.js"
+import { StringGuard } from "mods/guards/strings/index.js"
+import { Override, Super } from "mods/super/index.js"
 
 export class UnionGuard<I, A, B> {
 

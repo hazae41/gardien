@@ -1,8 +1,8 @@
-import { Errorer } from "../../errorer"
-import { Guard } from "../../guard"
-import { Property } from "../../props"
-import { Override, Super } from "../../super"
-import { NumberGuard } from "../primitives"
+import { Errorer } from "mods/errorer/index.js"
+import { Guard } from "mods/guard/index.js"
+import { NumberGuard } from "mods/guards/primitives/index.js"
+import { Property } from "mods/props/index.js"
+import { Override, Super } from "mods/super/index.js"
 
 export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>> }> {
 

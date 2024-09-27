@@ -1,4 +1,4 @@
-import { Super } from "../../super"
+import { Super } from "mods/super/index.js"
 
 export class BooleanGuard {
 

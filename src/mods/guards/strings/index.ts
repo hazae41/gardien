@@ -1,8 +1,8 @@
-import { Errorer } from "../../errorer"
-import { Guard } from "../../guard"
-import { Override, Super } from "../../super"
-import { LengthGuard, MaxLengthGuard, Min, MinLengthGuard } from "../lengths"
-import { InterGuard } from "../logicals"
+import { Errorer } from "mods/errorer/index.js"
+import { Guard } from "mods/guard/index.js"
+import { LengthGuard, MaxLengthGuard, Min, MinLengthGuard } from "mods/guards/lengths/index.js"
+import { InterGuard } from "mods/guards/logicals/index.js"
+import { Override, Super } from "mods/super/index.js"
 
 export function string(message?: string) {
   return new StringGuardBuilder(new Errorer(StringGuard, () => new Error(message)))
