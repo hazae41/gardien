@@ -1,5 +1,5 @@
-import { IsSame } from "../same"
-import { Override, Resolve, Super } from "../super"
+import { IsSame } from "mods/same/index.js"
+import { Override, Resolve, Super } from "mods/super/index.js"
 
 export interface Guard<I, O> {
   asOrThrow(value: I): O

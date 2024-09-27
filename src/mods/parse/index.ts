@@ -1,14 +1,14 @@
-import { Finalize } from "../../libs/finalize"
-import { Guard } from "../guard"
-import { ArrayAndElementsGuard, BigIntGuard, BooleanGuard, InterGuard, NullGuard, NumberGuard, ObjectGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, TupleGuard, UnionGuard } from "../guards"
-import { StringGuard } from "../guards/strings"
-import { Property } from "../props"
+import { Finalize } from "libs/finalize/index.js"
+import { Guard } from "mods/guard/index.js"
+import { ArrayAndElementsGuard, BigIntGuard, BooleanGuard, InterGuard, NullGuard, NumberGuard, ObjectGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, TupleGuard, UnionGuard } from "mods/guards/index.js"
+import { StringGuard } from "mods/guards/strings/index.js"
+import { Property } from "mods/props/index.js"
 
 export type Parsed<T> =
   T extends unknown[] ? never :
   T extends Guard<unknown, unknown> ? T :
   T extends readonly unknown[] ? Guard<unknown, Finalize<Guard.AllOutput<AllParsed<T>>>> :
-  T extends object ? Guard<unknown, Finalize<Guard.AllOutput<AllParsed<Property.AllOptional<Property.AllReadonly<T>>>>>> :
+  T extends object ? Guard<unknown, Finalize<Guard.AllOutput<AllParsed<Property.AllUnwrapped<T>>>>> :
   Guard<unknown, T>
 
 export type AllParsed<T> = { [K in keyof T]: Parsed<T[K]> }

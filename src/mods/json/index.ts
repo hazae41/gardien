@@ -1,4 +1,4 @@
-import { Guard } from "../guard";
+import { Guard } from "mods/guard/index.js";
 
 export class Json<T> {
 

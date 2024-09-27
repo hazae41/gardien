@@ -1,6 +1,6 @@
-import { Guard } from "../guard"
-import { IsSame } from "../same"
-import { Override, Super } from "../super"
+import { Guard } from "mods/guard/index.js"
+import { IsSame } from "mods/same/index.js"
+import { Override, Super } from "mods/super/index.js"
 
 export class Errorer<T extends Guard<any, any>> {
 

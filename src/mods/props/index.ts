@@ -1,4 +1,4 @@
-import { Finalize } from "../../libs/finalize"
+import { Finalize } from "libs/finalize/index.js"
 
 export type Property<T> =
   | T

@@ -1,7 +1,7 @@
-import { NumberGuard } from "./guards/primitives"
-import { Json } from "./json"
-import { parse } from "./parse"
-import { Super } from "./super"
+import { NumberGuard } from "./guards/primitives/index.js"
+import { Json } from "./json/index.js"
+import { parse } from "./parse/index.js"
+import { Super } from "./super/index.js"
 
 export namespace ZeroHexStringGuard {
 
