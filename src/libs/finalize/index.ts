@@ -1,0 +1,1 @@
+export type Finalize<T> = {} & { [K in keyof T]: T[K] }
