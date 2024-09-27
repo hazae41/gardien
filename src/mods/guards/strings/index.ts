@@ -58,16 +58,16 @@ export class StringGuardBuilder<T extends Guard.Overloaded<unknown, unknown, str
     readonly guard: T
   ) { }
 
-  asOrThrow<X extends Guard.Overloaded.Strong<T>>(value: X): X
+  asOrThrow(value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T>
 
-  asOrThrow<X extends Guard.Overloaded.Weak<T>>(value: Super<X, Override<X, Required<Guard.Overloaded.Strong<T>>>>): Guard.Overloaded.Output<T>
+  asOrThrow(value: Guard.Overloaded.Strong<T>): Guard.Overloaded.Output<T>
 
-  asOrThrow(this: StringGuardBuilder<T>, value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
+  asOrThrow(this: StringGuardBuilder<Guard.Overloaded.Infer<T>>, value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
     return this.guard.asOrThrow(value)
   }
 
-  pipe<P extends string, U extends Guard<Guard.Overloaded.Output<T>, P>>(guard: U, message?: string) {
-    return new StringGuardBuilder<Guard.Overloaded<Guard.Overloaded.Weak<T>, Guard.Overloaded.Strong<U>, Guard.Overloaded.Output<U>>>(new Errorer(new InterGuard(this.guard, guard), () => new Error(message)))
+  pipe<U extends Guard<Guard.Overloaded.Output<T>, string>>(guard: U, message?: string) {
+    return new StringGuardBuilder(new Errorer(new InterGuard(this.guard, guard), () => new Error(message)))
   }
 
   min<N extends number>(length: N, message?: string) {
@@ -91,6 +91,22 @@ export class StringGuardBuilder<T extends Guard.Overloaded<unknown, unknown, str
   }
 
 }
+
+type D = Super<string, Override<string, string & { length: 12 }>>
+
+type Identity<T> = { [K in keyof T]: T[K] }
+
+type Z = Override<string, string & { length: 12 }>
+
+const z = null as any as Z
+
+function f(x: string) {
+
+}
+
+f(z)
+
+const x = Guard.asOrThrow(string().length(5), "hello" as string, "world" as string,)
 
 declare const StringIncludesSymbol: unique symbol
 
