@@ -1,3 +1,5 @@
+import { parse, Parsed } from "mods/parse/index.js"
+import { Property } from "mods/props/index.js"
 import { IsSame } from "mods/same/index.js"
 import { Override, Resolve, Super } from "mods/super/index.js"
 
@@ -67,8 +69,12 @@ export namespace Guard {
 
   export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Super<Resolve<X>, Override<X, Required<Guard.Overloaded.Strong<T>>>>): IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Override<X, Guard.Overloaded.Output<T>> : Guard.Overloaded.Output<T>;
 
-  export function asOrThrow<T extends Guard.Overloaded<any, any, any>>(guard: T, value: Guard.Input<T>): Guard.Output<T> {
-    return guard.asOrThrow(value)
+  export function asOrThrow<T>(guard: T, value: Guard.Input<Parsed<T>>): Guard.Output<Parsed<T>> {
+    if (guard instanceof Property.Optional)
+      return parse(guard.value).asOrThrow(value)
+    if (guard instanceof Property.Readonly)
+      return parse(guard.value).asOrThrow(value)
+    return parse(guard as any).asOrThrow(value)
   }
 
   // export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Strong<T>>(guard: T, value: Resolve<X>): (IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? X : Guard.Overloaded.Output<T>) | null;

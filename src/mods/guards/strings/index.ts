@@ -2,15 +2,6 @@ import { Errorer } from "mods/errorer/index.js"
 import { Guard } from "mods/guard/index.js"
 import { LengthGuard, MaxLengthGuard, Min, MinLengthGuard } from "mods/guards/lengths/index.js"
 import { InterGuard } from "mods/guards/logicals/index.js"
-import { Override, Super } from "mods/super/index.js"
-
-export function string(message?: string) {
-  return new StringGuardBuilder(new Errorer(StringGuard, () => new Error(message)))
-}
-
-export function stringable(message?: string) {
-  return new StringGuardBuilder(new Errorer(StringableGuard, () => new Error(message)))
-}
 
 export class StringableGuard {
 
@@ -91,22 +82,6 @@ export class StringGuardBuilder<T extends Guard.Overloaded<unknown, unknown, str
   }
 
 }
-
-type D = Super<string, Override<string, string & { length: 12 }>>
-
-type Identity<T> = { [K in keyof T]: T[K] }
-
-type Z = Override<string, string & { length: 12 }>
-
-const z = null as any as Z
-
-function f(x: string) {
-
-}
-
-f(z)
-
-const x = Guard.asOrThrow(string().length(5), "hello" as string, "world" as string,)
 
 declare const StringIncludesSymbol: unique symbol
 
