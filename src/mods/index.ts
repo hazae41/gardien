@@ -1,6 +1,6 @@
-import { NumberGuard } from "./guards/primitives/index.js"
-import { Json } from "./json/index.js"
+import { Guard } from "./guard/index.js"
 import { parse } from "./parse/index.js"
+import { array, optional, readonly, string } from "./toolbox/index.js"
 
 export namespace ZeroHexStringGuard {
 
@@ -16,18 +16,16 @@ export namespace ZeroHexStringGuard {
 
 }
 
-parse(() => null).asOrThrow(null)
-parse(() => "hello" as const).asOrThrow("hello")
-parse(() => 123 as const).asOrThrow(123)
-parse(() => 123n as const).asOrThrow(123n)
-parse(({ string }) => string).asOrThrow("hello")
-parse(({ array, string }) => array(string)).asOrThrow(["hello"])
+Guard.asOrThrow(parse(null), null)
+Guard.asOrThrow(parse("hello" as const), "hello")
+Guard.asOrThrow(parse(123 as const), 123)
+Guard.asOrThrow(parse(123n as const), 123n)
+Guard.asOrThrow(parse(string()), "hello")
+Guard.asOrThrow(parse(array(string())), ["hello"] as const)
 
-const MyObjectGuard = parse(({ readonly, optional, string }) => ({
+const MyObjectGuard = parse({
   hello: readonly("world" as const),
   world: optional(string)
-}))
+})
 
-const myObject = MyObjectGuard.asOrThrow({ hello: "world", world: "aaa" })
-
-console.log(new Json<number>(JSON.stringify(123)).parseOrThrow(NumberGuard))
+const myObject = Guard.asOrThrow(MyObjectGuard, { hello: "world", world: "aaa" })

@@ -5,13 +5,18 @@ import { Property } from "mods/props/index.js"
 export type Parsed<T> =
   T extends any[] ? never :
   T extends Guard<any, any> ? T :
-  T extends Property.Optional<infer U> ? Property.Optional<Parsed<U>> :
-  T extends Property.Readonly<infer U> ? Property.Readonly<Parsed<U>> :
-  T extends readonly any[] ? TupleGuard<T> :
-  T extends { [k: PropertyKey]: Property<any> } ? RecordGuard<AllParsed<T>> :
+  T extends readonly any[] ? TupleGuard<AllSubparsed<T>> :
+  T extends { [k: PropertyKey]: Property<any> } ? RecordGuard<AllSubparsed<T>> :
   Guard.Overloaded<unknown, T, T>
 
+export type Subparsed<T> =
+  T extends Property.Optional<infer U> ? Property.Optional<Subparsed<U>> :
+  T extends Property.Readonly<infer U> ? Property.Readonly<Subparsed<U>> :
+  Parsed<T>
+
 export type AllParsed<T> = { [K in keyof T]: Parsed<T[K]> }
+
+export type AllSubparsed<T> = { [K in keyof T]: Subparsed<T[K]> }
 
 export function parse<T>(value: T): Parsed<T> {
   if (value == null)

@@ -5,6 +5,11 @@
 export type Super<A, B> = B extends A ? A : never
 
 /**
+ * Accept a value of supertype or subtype of `T`
+ */
+export type Related<A, B> = A extends B ? A : B extends A ? A : never
+
+/**
  * Force literal type to be inferred
  */
 export type Resolve<T> = T extends Super<T, T> ? T : never

@@ -1,9 +1,7 @@
-import { Errorer } from "mods/errorer/index.js"
 import { Guard } from "mods/guard/index.js"
 import { NumberGuard } from "mods/guards/primitives/index.js"
-import { ZeroHexStringGuard } from "mods/index.js"
-import { parse } from "mods/parse/index.js"
 import { Property } from "mods/props/index.js"
+import { Related } from "mods/super/index.js"
 import { optional, readonly } from "mods/toolbox/index.js"
 
 export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>> }> {
@@ -78,19 +76,36 @@ export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>>
 
 }
 
+type X = {
+  readonly a: unknown,
+  readonly b: 123,
+  readonly c: number,
+}
+
+type Y = {
+  a: number,
+  b?: number,
+  c: number,
+}
+
+type AllRelated<T, U> = { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }
+
+function f<X>(z: AllRelated<X, Y>) {
+
+}
+
+f({ a: null as unknown, b: 123 } as const)
+
 Guard.asOrThrow(
-  new Errorer(
-    parse({
-      a: 123,
-      b: optional(ZeroHexStringGuard),
-      c: readonly(NumberGuard),
-    } as const),
-    () => new Error("Could not parse")
-  ),
+  new RecordGuard({
+    a: NumberGuard,
+    b: optional(NumberGuard),
+    c: readonly(NumberGuard),
+  }),
   {
-    a: 123,
-    b: "0x",
-    c: 122,
+    a: null as unknown,
+    b: 123,
+    c: 123,
   } as const
 )
 
