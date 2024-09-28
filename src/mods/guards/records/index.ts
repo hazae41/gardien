@@ -1,8 +1,6 @@
 import { Guard } from "mods/guard/index.js"
-import { NumberGuard } from "mods/guards/primitives/index.js"
 import { Property } from "mods/props/index.js"
 import { Related } from "mods/super/index.js"
-import { optional, readonly } from "mods/toolbox/index.js"
 
 export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>> }> {
 
@@ -76,36 +74,50 @@ export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>>
 
 }
 
-type X = {
-  readonly a: unknown,
-  readonly b: 123,
-  readonly c: number,
-}
-
 type Y = {
   a: number,
   b?: number,
   c: number,
 }
 
-type AllRelated<T, U> = { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }
+type AllRelated<T, U> =
+  T extends object ? (
+    U extends object ? (
+      { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }
+    ) : (
+      never
+    )
+  ) : (
+    Related<T, U & { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }>
+  )
 
-function f<X>(z: AllRelated<X, Y>) {
+/**
+ * Restructure `T` to have the same keys as `S`
+ */
+type Restruct<S, T> = T extends readonly (infer U)[] ? { [K in keyof S]: U } : T
 
-}
+function f<X>(z: AllRelated<X, Y>) { }
 
-f({ a: null as unknown, b: 123 } as const)
+f({ a: null as unknown, b: "", c: 123 } as const)
 
-Guard.asOrThrow(
-  new RecordGuard({
-    a: NumberGuard,
-    b: optional(NumberGuard),
-    c: readonly(NumberGuard),
-  }),
-  {
-    a: null as unknown,
-    b: 123,
-    c: 123,
-  } as const
-)
+function g<X>(z: AllRelated<X, Restruct<X, string & { length: 123 }>>): X { return z }
+
+g(null as any as string & { length: 123 })
+
+function h<X>(z: AllRelated<X, Restruct<X, readonly number[]>>): X { return z }
+
+h([null as unknown, 123] as const)
+
+// Guard.asOrThrow(
+//   new RecordGuard({
+//     a: NumberGuard,
+//     b: optional(NumberGuard),
+//     c: readonly(NumberGuard),
+//   }),
+//   {
+//     a: null as unknown,
+//     b: 123,
+//     c: 123,
+//   } as const
+// )
 

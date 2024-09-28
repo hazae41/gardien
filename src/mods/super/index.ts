@@ -10,6 +10,11 @@ export type Super<A, B> = B extends A ? A : never
 export type Related<A, B> = A extends B ? A : B extends A ? A : never
 
 /**
+ * Restructure `T` to have the same keys as `S`
+ */
+export type Restruct<S, T> = T extends readonly (infer U)[] ? { [K in keyof S]: U } : T
+
+/**
  * Force literal type to be inferred
  */
 export type Resolve<T> = T extends Super<T, T> ? T : never
