@@ -2,17 +2,17 @@
 /**
  * Accept a value of supertype of `T` 
  */
-export type Super<A, B> = B extends A ? A : never
+export type Super<X, T> = T extends X ? X : never
 
 /**
  * Accept a value of supertype or subtype of `T`
  */
-export type Related<A, B> = A extends B ? A : B extends A ? A : never
+export type Related<X, T> = X extends T ? X : T extends X ? X : never
 
 /**
- * Restructure `T` to have the same keys as `S`
+ * Restructure `T` to have the same keys as `X`
  */
-export type Restruct<S, T> = T extends readonly (infer U)[] ? { [K in keyof S]: U } : T
+export type Restruct<X, T> = T extends readonly (infer U)[] ? { [K in keyof X]: U } : T
 
 /**
  * Force literal type to be inferred
@@ -20,14 +20,17 @@ export type Restruct<S, T> = T extends readonly (infer U)[] ? { [K in keyof S]: 
 export type Resolve<T> = T extends Super<T, T> ? T : never
 
 /**
- * Override type `X` with type `S`
+ * Accept a value of recursive subtype or supertype of `T`
  */
-export type Override<A, B> = A extends readonly unknown[] ? (
-  B extends readonly (infer T)[] ? (
-    { [K in keyof A]: T }
+export type AllRelated<T, U> =
+  T extends object ? (
+    U extends object ? (
+      { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }
+    ) : (
+      never
+    )
   ) : (
-    Omit<A, keyof B> & B
+    Related<T, U & { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }>
   )
-) : (
-    Omit<A, keyof B> & B
-  )
+
+export type Childest<A, B> = B extends A ? B : A extends B ? B : never

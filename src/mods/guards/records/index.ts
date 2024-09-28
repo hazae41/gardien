@@ -1,6 +1,8 @@
 import { Guard } from "mods/guard/index.js"
 import { Property } from "mods/props/index.js"
 import { Related } from "mods/super/index.js"
+import { optional, readonly } from "mods/toolbox/index.js"
+import { NumberGuard } from "../primitives/index.js"
 
 export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>> }> {
 
@@ -108,16 +110,16 @@ function h<X>(z: AllRelated<X, Restruct<X, readonly number[]>>): X { return z }
 
 h([null as unknown, 123] as const)
 
-// Guard.asOrThrow(
-//   new RecordGuard({
-//     a: NumberGuard,
-//     b: optional(NumberGuard),
-//     c: readonly(NumberGuard),
-//   }),
-//   {
-//     a: null as unknown,
-//     b: 123,
-//     c: 123,
-//   } as const
-// )
+Guard.asOrThrow(
+  new RecordGuard({
+    a: NumberGuard,
+    b: optional(NumberGuard),
+    c: readonly(NumberGuard),
+  }),
+  {
+    a: null as unknown,
+    b: 123,
+    c: 123,
+  } as const
+)
 
