@@ -1,26 +1,17 @@
-
 /**
- * Accept a value of supertype of `T` 
+ * Force literal type to be inferred
  */
-export type Super<X, T> = T extends X ? X : never
-
-/**
- * Accept a value of supertype or subtype of `T`
- */
-export type Related<X, T> = X extends T ? X : T extends X ? X : never
+export type Resolve<T> = T extends (T extends T ? T : never) ? T : never
 
 /**
  * Restructure `T` to have the same keys as `X`
  */
-export type Restruct<X, T> = T extends readonly (infer U)[] ? { [K in keyof X]: U } : T
-
-/**
- * Force literal type to be inferred
- */
-export type Resolve<T> = T extends Super<T, T> ? T : never
+export type Restruct<X, T> = X extends readonly any[] ? (T extends readonly (infer U)[] ? T extends readonly [any, ...any[]] ? T : { [K in keyof X]: U } : T) : T
 
 export type Sup<X, T> = T extends X ? X : T
 
-export type AllExo<X, T> = { [K in keyof T]: K extends keyof X ? Sup<X[K], T[K]> : T[K] }
+export type Super<X, T> = T extends X ? X : never
 
 export type Inf<X, T> = T extends X ? T : X
+
+export type Resup<X, T> = Super<X, { [K in keyof T]: K extends keyof X ? Sup<X[K], T[K]> : T[K] }>

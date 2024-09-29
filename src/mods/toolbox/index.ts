@@ -1,5 +1,5 @@
 import { Errorer } from "mods/errorer/index.js"
-import { ArrayAndElementsGuard } from "mods/guards/index.js"
+import { ArrayAndElementsGuard, NumberGuard } from "mods/guards/index.js"
 import { StringableGuard, StringGuard, StringGuardBuilder } from "mods/guards/strings/index.js"
 import { parse } from "mods/parse/index.js"
 import { Property } from "mods/props/index.js"
@@ -22,4 +22,8 @@ export function string(message?: string) {
 
 export function stringable(message?: string) {
   return new StringGuardBuilder(new Errorer(StringableGuard, () => new Error(message)))
+}
+
+export function number(message?: string) {
+  return new Errorer(NumberGuard, () => new Error(message))
 }

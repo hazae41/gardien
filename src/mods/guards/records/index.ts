@@ -2,9 +2,8 @@ import { Finalize } from "libs/finalize/index.js"
 import { Guard } from "mods/guard/index.js"
 import { parse } from "mods/parse/index.js"
 import { Property } from "mods/props/index.js"
-import { Inf, Restruct, Sup } from "mods/super/index.js"
-import { optional, readonly } from "mods/toolbox/index.js"
-import { NumberGuard } from "../primitives/index.js"
+import { Restruct, Sup } from "mods/super/index.js"
+import { number, optional, readonly } from "mods/toolbox/index.js"
 
 export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>> }> {
 
@@ -12,11 +11,16 @@ export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>>
     readonly guard: T
   ) { }
 
-  asOrThrow(value: Guard.Overloaded.AllWeakOrSelf<Property.AllUnwrapped<T>>): Guard.Overloaded.AllOutputOrSelf<Property.AllUnwrapped<T>>
+  asOrThrow(value: unknown): Guard.Overloaded.AllOutputOrSelf<Property.AllUnwrapped<T>>
 
   asOrThrow(value: Guard.Overloaded.AllStrongOrSelf<Property.AllUnwrapped<T>>): Guard.Overloaded.AllOutputOrSelf<Property.AllUnwrapped<T>>
 
-  asOrThrow(value: Guard.Overloaded.AllWeakOrSelf<Property.AllUnwrapped<T>>): Guard.Overloaded.AllOutputOrSelf<Property.AllUnwrapped<T>> {
+  asOrThrow(value: unknown): Guard.Overloaded.AllOutputOrSelf<Property.AllUnwrapped<T>> {
+    if (value == null)
+      throw new Error()
+    if (typeof value !== "object")
+      throw new Error()
+
     const result: Record<PropertyKey, unknown> = {}
 
     let cause = []
@@ -84,16 +88,17 @@ type Y = {
 }
 
 type FI<T, U> = Sup<T, { [K in keyof U]: K extends keyof T ? Sup<T[K], U[K]> : U[K] }>
-type FO<T, U> = Inf<U, U & { [K in keyof T]: K extends keyof U ? Inf<T[K], U[K]> : T[K] }>
+type FO<T, U> = T & U
 
 function f<X>(z: FI<X, Y>): Finalize<FO<X, Y>> { return null as any }
 
 f({ a: null as unknown, b: null as unknown, c: 123, d: 456 } as const)
 f({ a: null as unknown, b: 23, c: 123, d: 456 } as const)
 f({ a: 123, b: "", c: 123, d: 456 } as const)
+f(null as unknown)
 
 type GI<T, U> = Sup<T, { [K in keyof U]: K extends keyof T ? Sup<T[K], U[K]> : U[K] }>
-type GO<T, U> = Inf<{ [K in keyof U]: K extends keyof T ? Inf<T[K], U[K]> : U[K] }, { [K in keyof T]: K extends keyof U ? Inf<U[K], T[K]> : T[K] }>
+type GO<T, U> = T & U
 
 function g<X>(z: GI<X, Restruct<X, string>>): GO<X, string & { length: 12 }> { return z as any }
 
@@ -101,14 +106,14 @@ function json(x: string & { length: 12 }) {
   return JSON.parse(x)
 }
 
-g(null as any as string & { length: 12 })
+json(g(null as any as string))
 
 g("")
 g(123)
 g(null as unknown)
 
 type HI<T, U> = Sup<T, { [K in keyof U]: K extends keyof T ? Sup<T[K], U[K]> : U[K] }>
-type HO<T, U> = Inf<U, U & { [K in keyof T]: K extends keyof U ? Inf<T[K], U[K]> : T[K] }>
+type HO<T, U> = T & U
 
 function h<X>(z: HI<X, Restruct<X, readonly number[]>>): HO<X, Restruct<X, readonly number[]>> { return z as any }
 
@@ -116,14 +121,10 @@ const [a, b] = h([null as unknown, 456] as const)
 
 const result = Guard.asOrThrow(
   parse({
-    a: NumberGuard,
-    b: optional(NumberGuard),
-    c: readonly(NumberGuard),
+    a: number(),
+    b: optional(number()),
+    c: readonly(number()),
   }),
-  {
-    a: null as unknown,
-    b: 123,
-    c: 123,
-  } as const
+  null as unknown
 )
 

@@ -1,7 +1,8 @@
 import { Finalize } from "libs/finalize/index.js"
+import { ZeroHexStringGuard } from "mods/index.js"
 import { parse, Parsed } from "mods/parse/index.js"
 import { IsSame } from "mods/same/index.js"
-import { AllRelated, Resolve, Restruct } from "mods/super/index.js"
+import { Resolve, Restruct, Resup } from "mods/super/index.js"
 
 export interface Guard<I, O> {
   asOrThrow(value: I): O
@@ -65,9 +66,9 @@ export namespace Guard {
 
   export type AllOutputOrSelf<T> = { [K in keyof T]: OutputOrSelf<T[K]> }
 
-  export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Strong<T>>(guard: T, value: Resolve<X>): IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Finalize<X> : Finalize<Guard.Overloaded.Output<T>>;
+  // export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Strong<T>>(guard: T, value: Resolve<X>): IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Finalize<X> : Finalize<Guard.Overloaded.Output<T>>;
 
-  export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: AllRelated<Resolve<X>, Restruct<Resolve<X>, Guard.Overloaded.Strong<T>>>): IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Finalize<Restruct<X, Guard.Overloaded.Output<T>>> : Finalize<Guard.Overloaded.Output<T>>;
+  export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Resup<Resolve<X>, Restruct<Resolve<X>, Guard.Overloaded.Strong<T>>>): IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Finalize<X & Restruct<X, Guard.Overloaded.Output<T>>> : Finalize<Guard.Overloaded.Output<T>>;
 
   export function asOrThrow<T>(guard: T, value: Guard.Input<Parsed<T>>): Guard.Output<Parsed<T>> {
     return parse(guard).asOrThrow(value as any)
@@ -96,3 +97,5 @@ export namespace Guard {
   // }
 
 }
+
+Guard.asOrThrow(ZeroHexStringGuard, "0xd")
