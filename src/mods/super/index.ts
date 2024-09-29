@@ -10,8 +10,6 @@ export type Restruct<X, T> = X extends readonly any[] ? (T extends readonly (inf
 
 export type Sup<X, T> = T extends X ? X : T
 
-export type Super<X, T> = T extends X ? X : never
-
 export type Inf<X, T> = T extends X ? T : X
 
 export type Resup<X, T> = unknown extends X ? Sup<X, T> : { [K in keyof T]: K extends keyof X ? Resup<X[K], T[K]> : T[K] }
