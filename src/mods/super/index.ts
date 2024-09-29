@@ -33,4 +33,6 @@ export type AllRelated<T, U> =
     Related<T, U & { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }>
   )
 
-export type Childest<A, B> = B extends A ? B : A extends B ? B : never
+export type Childest<A, B> = B extends A ? B : A extends B ? A : never
+
+export type Parentest<A, B> = B extends A ? A : A extends B ? B : never
