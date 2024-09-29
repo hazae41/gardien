@@ -19,20 +19,4 @@ export type Restruct<X, T> = T extends readonly (infer U)[] ? { [K in keyof X]: 
  */
 export type Resolve<T> = T extends Super<T, T> ? T : never
 
-/**
- * Accept a value of recursive subtype or supertype of `T`
- */
-export type AllRelated<T, U> =
-  T extends object ? (
-    U extends object ? (
-      { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }
-    ) : (
-      never
-    )
-  ) : (
-    Related<T, U & { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }>
-  )
-
-export type Childest<A, B> = B extends A ? B : A extends B ? A : never
-
-export type Parentest<A, B> = B extends A ? A : A extends B ? B : never
+export type Ex<A, B> = B extends A ? A : B

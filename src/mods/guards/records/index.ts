@@ -1,7 +1,7 @@
 import { Guard } from "mods/guard/index.js"
 import { parse } from "mods/parse/index.js"
 import { Property } from "mods/props/index.js"
-import { Parentest, Related, Restruct } from "mods/super/index.js"
+import { Ex, Parentest, Related, Restruct } from "mods/super/index.js"
 import { optional, readonly } from "mods/toolbox/index.js"
 import { NumberGuard } from "../primitives/index.js"
 
@@ -82,7 +82,7 @@ type Y = {
   d: 456
 }
 
-type F<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Parentest<T[K], U[K]> : U[K] }>
+type F<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Ex<T[K], U[K]> : U[K] }>
 
 function f<X>(z: F<X, Y>) { }
 
@@ -96,16 +96,16 @@ f({ a: 123, b: "", c: 123, d: 456 } as const)
 
 // type X = A<typeof arg, Y>
 
-type G<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Parentest<T[K], U[K]> : U[K] }>
+type G<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Ex<T[K], U[K]> : U[K] }>
 
-function g<X>(z: G<X, Restruct<X, string & { length: 12 }>>): X { return z }
+function g<X>(z: G<X, Restruct<X, string>>): X { return z }
 
 g(null as any as string)
 g("")
 g(123)
 g(null as unknown)
 
-type H<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Parentest<T[K], U[K]> extends never ? U[K] : Parentest<T[K], U[K]> : U[K] }>
+type H<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Ex<T[K], U[K]> : U[K] }>
 
 function h<X>(z: H<X, Restruct<X, readonly number[]>>): X { return z }
 
