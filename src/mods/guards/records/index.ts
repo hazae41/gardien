@@ -2,7 +2,7 @@ import { Finalize } from "libs/finalize/index.js"
 import { Guard } from "mods/guard/index.js"
 import { parse } from "mods/parse/index.js"
 import { Property } from "mods/props/index.js"
-import { Exo, Restruct, Unexo } from "mods/super/index.js"
+import { Inf, Restruct, Sup } from "mods/super/index.js"
 import { optional, readonly } from "mods/toolbox/index.js"
 import { NumberGuard } from "../primitives/index.js"
 
@@ -83,8 +83,8 @@ type Y = {
   d: 456
 }
 
-type FI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
-type FO<T, U> = T & { [K in keyof U]: K extends keyof T ? Unexo<T[K], U[K]> : U[K] }
+type FI<T, U> = Sup<T, { [K in keyof U]: K extends keyof T ? Sup<T[K], U[K]> : U[K] }>
+type FO<T, U> = Inf<U, U & { [K in keyof T]: K extends keyof U ? Inf<T[K], U[K]> : T[K] }>
 
 function f<X>(z: FI<X, Y>): Finalize<FO<X, Y>> { return null as any }
 
@@ -92,23 +92,23 @@ f({ a: null as unknown, b: null as unknown, c: 123, d: 456 } as const)
 f({ a: null as unknown, b: 23, c: 123, d: 456 } as const)
 f({ a: 123, b: "", c: 123, d: 456 } as const)
 
-type GI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
-type GO<T, U> = T & { [K in keyof U]: K extends keyof T ? Unexo<T[K], U[K]> : U[K] }
+type GI<T, U> = Sup<T, { [K in keyof U]: K extends keyof T ? Sup<T[K], U[K]> : U[K] }>
+type GO<T, U> = Inf<{ [K in keyof U]: K extends keyof T ? Inf<T[K], U[K]> : U[K] }, { [K in keyof T]: K extends keyof U ? Inf<U[K], T[K]> : T[K] }>
 
-function g<X>(z: GI<X, Restruct<X, string & { length: 12 }>>): GO<X, Restruct<X, string & { length: 12 }>> { return z as any }
+function g<X>(z: GI<X, Restruct<X, string>>): GO<X, string & { length: 12 }> { return z as any }
 
 function json(x: string & { length: 12 }) {
   return JSON.parse(x)
 }
 
-json(g(null as any as string))
+g(null as any as string & { length: 12 })
 
 g("")
 g(123)
 g(null as unknown)
 
-type HI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
-type HO<T, U> = T & { [K in keyof U]: K extends keyof T ? Unexo<T[K], U[K]> : U[K] }
+type HI<T, U> = Sup<T, { [K in keyof U]: K extends keyof T ? Sup<T[K], U[K]> : U[K] }>
+type HO<T, U> = Inf<U, U & { [K in keyof T]: K extends keyof U ? Inf<T[K], U[K]> : T[K] }>
 
 function h<X>(z: HI<X, Restruct<X, readonly number[]>>): HO<X, Restruct<X, readonly number[]>> { return z as any }
 

@@ -19,8 +19,8 @@ export type Restruct<X, T> = T extends readonly (infer U)[] ? { [K in keyof X]: 
  */
 export type Resolve<T> = T extends Super<T, T> ? T : never
 
-export type Exo<X, T> = T extends X ? X : T
+export type Sup<X, T> = T extends X ? X : T
 
-export type AllExo<X, T> = { [K in keyof T]: K extends keyof X ? Exo<X[K], T[K]> : T[K] }
+export type AllExo<X, T> = { [K in keyof T]: K extends keyof X ? Sup<X[K], T[K]> : T[K] }
 
-export type Unexo<X, T> = T extends X ? T : X
+export type Inf<X, T> = T extends X ? T : X
