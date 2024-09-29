@@ -1,7 +1,5 @@
 import { Guard } from "mods/guard/index.js"
-import { parse } from "mods/parse/index.js"
 import { Property } from "mods/props/index.js"
-import { number, optional, readonly } from "mods/toolbox/index.js"
 
 export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>> }> {
 
@@ -77,15 +75,3 @@ export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>>
   }
 
 }
-
-const result = Guard.asOrThrow(
-  parse({
-    a: number(),
-    b: optional(number()),
-    c: readonly(number()),
-  }),
-  {
-
-  } as const
-)
-

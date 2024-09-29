@@ -1,5 +1,5 @@
 import { Guard } from "mods/guard/index.js"
-import { NullGuard, RecordGuard, StrongEqualityGuard, TupleGuard } from "mods/guards/index.js"
+import { RecordGuard, StrongEqualityGuard, TupleGuard } from "mods/guards/index.js"
 import { Property } from "mods/props/index.js"
 
 export type Parsed<T> =
@@ -7,7 +7,7 @@ export type Parsed<T> =
   T extends Guard<any, any> ? T :
   T extends readonly any[] ? TupleGuard<AllSubparsed<T>> :
   T extends { [k: PropertyKey]: Property<any> } ? RecordGuard<AllSubparsed<T>> :
-  Guard.Overloaded<unknown, T, T>
+  StrongEqualityGuard<T>
 
 export type Subparsed<T> =
   T extends Property.Optional<infer U> ? Property.Optional<Subparsed<U>> :
@@ -20,22 +20,22 @@ export type AllSubparsed<T> = { [K in keyof T]: Subparsed<T[K]> }
 
 export function parse<T>(value: T): Parsed<T> {
   if (value == null)
-    return NullGuard as any
+    return new StrongEqualityGuard(value) as any
+
+  if (typeof value !== "object")
+    return new StrongEqualityGuard(value) as any
 
   if (Array.isArray(value))
     return new TupleGuard(value.map(x => parse(x))) as any
 
-  if (Object.getPrototypeOf(value) === Object.prototype)
-    return new RecordGuard(Object.fromEntries(Object.entries(value).map(([k, v]) => {
-      if (v instanceof Property.Readonly)
-        return [k, new Property.Readonly(parse(v.value))]
-      if (v instanceof Property.Optional)
-        return [k, new Property.Optional(parse(v.value))]
-      return [k, parse(v)]
-    }))) as any
-
-  if (typeof value === "object" && "asOrThrow" in value)
+  if ("asOrThrow" in value)
     return value as any
 
-  return new StrongEqualityGuard(value) as any
+  return new RecordGuard(Object.fromEntries(Object.entries(value).map(([k, v]) => {
+    if (v instanceof Property.Readonly)
+      return [k, new Property.Readonly(parse(v.value))]
+    if (v instanceof Property.Optional)
+      return [k, new Property.Optional(parse(v.value))]
+    return [k, parse(v)]
+  }))) as any
 }

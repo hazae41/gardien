@@ -1,8 +1,7 @@
-import { Finalize } from "libs/finalize/index.js"
-import { ZeroHexStringGuard } from "mods/index.js"
-import { parse, Parsed } from "mods/parse/index.js"
-import { IsSame } from "mods/same/index.js"
-import { Resolve, Restruct, Resup } from "mods/super/index.js"
+import { Restruct } from "libs/restruct/index.js"
+import { IsSame } from "libs/same/index.js"
+import { Resup } from "libs/supinf/index.js"
+import { string } from "mods/toolbox/index.js"
 
 export interface Guard<I, O> {
   asOrThrow(value: I): O
@@ -44,58 +43,38 @@ export namespace Guard {
 
     export type AllOutputOrSelf<T> = { [K in keyof T]: OutputOrSelf<T[K]> }
 
+    export type Guardable<X extends Guard.Overloaded.Weak<T>, T extends Guard.Overloaded<any, any, any>> = Guard.Overloaded.Strong<T> | Resup<X, Restruct<X, Guard.Overloaded.Strong<T>>>
+
+    export type Guarded<X extends Guard.Overloaded.Weak<T>, T extends Guard.Overloaded<any, any, any>> = IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? X & Restruct<X, Guard.Overloaded.Output<T>> : Guard.Overloaded.Output<T>
+
   }
 
-  export type Infer<T> = Guard<Guard.Input<T>, Guard.Output<T>>
-
-  export type Input<T> = T extends Guard<infer X, any> ? X : never
-
-  export type InputOrSelf<T> = T extends Guard<infer X, any> ? X : T
-
-  export type Output<T> = T extends Guard<any, infer X> ? X : never
-
-  export type OutputOrSelf<T> = T extends Guard<any, infer X> ? X : T
-
-  export type AllInfer<T> = { [K in keyof T]: Infer<T[K]> }
-
-  export type AllInput<T> = { [K in keyof T]: Input<T[K]> }
-
-  export type AllInputOrSelf<T> = { [K in keyof T]: InputOrSelf<T[K]> }
-
-  export type AllOutput<T> = { [K in keyof T]: Output<T[K]> }
-
-  export type AllOutputOrSelf<T> = { [K in keyof T]: OutputOrSelf<T[K]> }
-
-  // export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Strong<T>>(guard: T, value: Resolve<X>): IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Finalize<X> : Finalize<Guard.Overloaded.Output<T>>;
-
-  export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Resup<Resolve<X>, Restruct<Resolve<X>, Guard.Overloaded.Strong<T>>>): IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Finalize<X & Restruct<X, Guard.Overloaded.Output<T>>> : Finalize<Guard.Overloaded.Output<T>>;
-
-  export function asOrThrow<T>(guard: T, value: Guard.Input<Parsed<T>>): Guard.Output<Parsed<T>> {
-    return parse(guard).asOrThrow(value as any)
+  export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> {
+    return guard.asOrThrow(value)
   }
 
-  // export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Strong<T>>(guard: T, value: Resolve<X>): (IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? X : Guard.Overloaded.Output<T>) | null;
+  export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> | null {
+    try {
+      return guard.asOrThrow(value)
+    } catch {
+      return null
+    }
+  }
 
-  // export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Super<Resolve<X>, Override<X, Required<Guard.Overloaded.Strong<T>>>>): (IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Override<X, Guard.Overloaded.Output<T>> : Guard.Overloaded.Output<T>) | null;
+  export function is<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): value is Guard.Overloaded.Guarded<X, T> {
+    try {
+      guard.asOrThrow(value)
 
-  // export function asOrNull<T extends Guard.Overloaded<any, any, any>>(guard: T, value: Guard.Input<T>): Guard.Output<T> | null {
-  //   try {
-  //     return guard.asOrThrow(value)
-  //   } catch {
-  //     return null
-  //   }
-  // }
-
-  // export function is<T extends Guard<unknown, unknown>, X>(guard: T, value: Coerced.Input<T["asOrThrow"], X, Guard.Input<T>, Guard.Output<T>>): value is Coerced.Input<T["asOrThrow"], X, Guard.Input<T>, Guard.Output<T>> & Guard.Output<T> {
-  //   try {
-  //     guard.asOrThrow(value as Guard.Input<T>)
-
-  //     return true
-  //   } catch {
-  //     return false
-  //   }
-  // }
+      return true
+    } catch {
+      return false
+    }
+  }
 
 }
 
-Guard.asOrThrow(ZeroHexStringGuard, "0xd")
+const x = null as unknown
+
+if (Guard.is(string().min(12), x)) {
+  const y = x.toLowerCase()
+}
