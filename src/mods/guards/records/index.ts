@@ -84,7 +84,7 @@ type Y = {
 }
 
 type FI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
-type FO<T, U> = T & { [K in keyof T]: K extends keyof U ? Unexo<T[K], U[K]> : T[K] }
+type FO<T, U> = T & { [K in keyof U]: K extends keyof T ? Unexo<T[K], U[K]> : U[K] }
 
 function f<X>(z: FI<X, Y>): Finalize<FO<X, Y>> { return null as any }
 
@@ -93,20 +93,22 @@ f({ a: null as unknown, b: 23, c: 123, d: 456 } as const)
 f({ a: 123, b: "", c: 123, d: 456 } as const)
 
 type GI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
-type GO<T, U> = T & { [K in keyof T]: K extends keyof U ? Unexo<T[K], U[K]> : T[K] }
+type GO<T, U> = T & { [K in keyof U]: K extends keyof T ? Unexo<T[K], U[K]> : U[K] }
 
-function g<X>(z: GI<X, Restruct<X, string>>): GO<X, Restruct<X, string>> { return z as any }
+function g<X>(z: GI<X, Restruct<X, string & { length: 12 }>>): GO<X, Restruct<X, string & { length: 12 }>> { return z as any }
 
-function json(x: string) {
+function json(x: string & { length: 12 }) {
   return JSON.parse(x)
 }
+
+json(g(null as any as string))
 
 g("")
 g(123)
 g(null as unknown)
 
 type HI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
-type HO<T, U> = T & { [K in keyof T]: K extends keyof U ? Unexo<T[K], U[K]> : T[K] }
+type HO<T, U> = T & { [K in keyof U]: K extends keyof T ? Unexo<T[K], U[K]> : U[K] }
 
 function h<X>(z: HI<X, Restruct<X, readonly number[]>>): HO<X, Restruct<X, readonly number[]>> { return z as any }
 
