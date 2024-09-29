@@ -1,7 +1,8 @@
+import { Finalize } from "libs/finalize/index.js"
 import { Guard } from "mods/guard/index.js"
 import { parse } from "mods/parse/index.js"
 import { Property } from "mods/props/index.js"
-import { Ex, Parentest, Related, Restruct } from "mods/super/index.js"
+import { Exo, Restruct, Unexo } from "mods/super/index.js"
 import { optional, readonly } from "mods/toolbox/index.js"
 import { NumberGuard } from "../primitives/index.js"
 
@@ -82,36 +83,34 @@ type Y = {
   d: 456
 }
 
-type F<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Ex<T[K], U[K]> : U[K] }>
+type FI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
+type FO<T, U> = T & { [K in keyof T]: K extends keyof U ? Unexo<T[K], U[K]> : T[K] }
 
-function f<X>(z: F<X, Y>) { }
+function f<X>(z: FI<X, Y>): Finalize<FO<X, Y>> { return null as any }
 
 f({ a: null as unknown, b: null as unknown, c: 123, d: 456 } as const)
 f({ a: null as unknown, b: 23, c: 123, d: 456 } as const)
 f({ a: 123, b: "", c: 123, d: 456 } as const)
 
-// const arg = { a: null as unknown, b: 23, c: 123 } as const
+type GI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
+type GO<T, U> = T & { [K in keyof T]: K extends keyof U ? Unexo<T[K], U[K]> : T[K] }
 
-// type A<T, U> = { [K in keyof T]: K extends keyof U ? Related<T[K], U[K]> : T[K] }
+function g<X>(z: GI<X, Restruct<X, string>>): GO<X, Restruct<X, string>> { return z as any }
 
-// type X = A<typeof arg, Y>
+function json(x: string) {
+  return JSON.parse(x)
+}
 
-type G<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Ex<T[K], U[K]> : U[K] }>
-
-function g<X>(z: G<X, Restruct<X, string>>): X { return z }
-
-g(null as any as string)
 g("")
 g(123)
 g(null as unknown)
 
-type H<T, U> = Related<T, { [K in keyof U]: K extends keyof T ? Ex<T[K], U[K]> : U[K] }>
+type HI<T, U> = Exo<T, { [K in keyof U]: K extends keyof T ? Exo<T[K], U[K]> : U[K] }>
+type HO<T, U> = T & { [K in keyof T]: K extends keyof U ? Unexo<T[K], U[K]> : T[K] }
 
-function h<X>(z: H<X, Restruct<X, readonly number[]>>): X { return z }
+function h<X>(z: HI<X, Restruct<X, readonly number[]>>): HO<X, Restruct<X, readonly number[]>> { return z as any }
 
-h([null as unknown, 44,] as const)
-
-type X = Parentest<string, number>
+const [a, b] = h([null as unknown, 456] as const)
 
 const result = Guard.asOrThrow(
   parse({
