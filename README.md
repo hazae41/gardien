@@ -26,7 +26,7 @@ npm i @hazae41/gardien
 const value = Guard.asOrThrow(z.numberable().nonNegative(), "0x123")
 ```
 
-### Validating a string with errors
+### Validating a string with an error message
 
 ```typescript
 Guard.asOrThrow(z.string().minmax(6, 24, "Password must be between 6 and 24 characters"), password)
