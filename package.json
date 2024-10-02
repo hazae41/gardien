@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "@hazae41/gardien",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Type-safe runtime schema validation and parsing",
   "homepage": "https://github.com/hazae41/gardien",
   "repository": "github:hazae41/gardien",
