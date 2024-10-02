@@ -25,58 +25,6 @@ export class BooleanGuard {
 
 }
 
-export class TrueGuard {
-
-  constructor() { }
-
-  static asOrThrow(value: unknown): true
-
-  static asOrThrow(value: true): true
-
-  static asOrThrow(value: unknown): true {
-    if (value !== true)
-      throw new Error()
-    return value
-  }
-
-  asOrThrow(value: unknown): true
-
-  asOrThrow(value: true): true
-
-  asOrThrow(value: unknown): true {
-    if (value !== true)
-      throw new Error()
-    return value
-  }
-
-}
-
-export class FalseGuard {
-
-  constructor() { }
-
-  static asOrThrow(value: unknown): false
-
-  static asOrThrow(value: false): false
-
-  static asOrThrow(value: unknown): false {
-    if (value !== false)
-      throw new Error()
-    return value
-  }
-
-  asOrThrow(value: unknown): false
-
-  asOrThrow(value: false): false
-
-  asOrThrow(value: unknown): false {
-    if (value !== false)
-      throw new Error()
-    return value
-  }
-
-}
-
 export class NumberGuard {
 
   constructor() { }

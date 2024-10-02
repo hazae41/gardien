@@ -58,7 +58,7 @@ export class StringGuardBuilder<T extends Guard.Overloaded<unknown, unknown, str
   }
 
   pipe<U extends Guard<Guard.Overloaded.Output<T>, string>>(guard: U, message?: string) {
-    return new StringGuardBuilder(new Errorer(new InterGuard(this.guard, guard), () => new Error(message)))
+    return new StringGuardBuilder(new Errorer(new InterGuard(this.guard, guard), (cause) => new Error(message, { cause })))
   }
 
   min<N extends number>(length: N, message?: string) {

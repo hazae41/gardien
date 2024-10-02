@@ -1,4 +1,3 @@
-
 export class LengthGuard<T extends { length: number }, N extends number> {
 
   constructor(

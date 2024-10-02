@@ -25,3 +25,15 @@ export class NeverGuard {
   }
 
 }
+
+export class AssertGuard<T> {
+
+  asOrThrow(value: unknown): T
+
+  asOrThrow(value: T): T
+
+  asOrThrow(value: unknown): T {
+    return value as T
+  }
+
+}

@@ -77,3 +77,23 @@ export class TupleGuard<T extends readonly Guard<any, any>[]> {
   }
 
 }
+
+export class ArrayAndTupleGuard<T extends readonly Guard<any, any>[]> {
+
+  constructor(
+    readonly guards: T
+  ) { }
+
+  asOrThrow(value: unknown): Guard.Overloaded.AllOutput<T>
+
+  asOrThrow(value: Guard.Overloaded.AllStrong<T>): Guard.Overloaded.AllOutput<T>
+
+  asOrThrow(this: TupleGuard<Guard.Overloaded.AllInfer<T>>, value: unknown): Guard.Overloaded.AllOutput<T> {
+    if (!Array.isArray(value))
+      throw new Error()
+    if (value.length !== this.guards.length)
+      throw new Error()
+    return value.map((x, i) => this.guards[i].asOrThrow(x)) as Guard.Overloaded.AllOutput<T>
+  }
+
+}

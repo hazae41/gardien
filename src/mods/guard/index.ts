@@ -1,7 +1,6 @@
 import { Restruct } from "libs/restruct/index.js"
 import { IsSame } from "libs/same/index.js"
 import { Resup } from "libs/supinf/index.js"
-import { string } from "mods/toolbox/index.js"
 
 export interface Guard<I, O> {
   asOrThrow(value: I): O
@@ -71,10 +70,4 @@ export namespace Guard {
     }
   }
 
-}
-
-const x = null as unknown
-
-if (Guard.is(string().min(12), x)) {
-  const y = x.toLowerCase()
 }
