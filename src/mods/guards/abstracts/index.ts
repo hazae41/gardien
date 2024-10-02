@@ -1,26 +1,22 @@
-export class AnyGuard {
+export class PassGuard<T> {
 
-  constructor() { }
+  asOrThrow(value: T): T
 
-  static asOrThrow(value: any): any {
-    return value
-  }
+  asOrThrow(value: T): T
 
-  asOrThrow(value: any): any {
+  asOrThrow(value: T): T {
     return value
   }
 
 }
 
-export class NeverGuard {
+export class FailGuard<T> {
 
-  constructor() { }
+  asOrThrow(value: T): never
 
-  static asOrThrow(value: never): never {
-    throw new Error()
-  }
+  asOrThrow(value: T): never
 
-  asOrThrow(value: never): never {
+  asOrThrow(value: T): never {
     throw new Error()
   }
 

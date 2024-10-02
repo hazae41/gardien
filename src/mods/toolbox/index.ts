@@ -1,7 +1,7 @@
 import { Exact } from "libs/exact/index.js"
 import { Errorer } from "mods/errorer/index.js"
 import { Guard } from "mods/guard/index.js"
-import { AnyGuard, ArrayAndElementsGuard, ArrayAndTupleGuard, AssertGuard, BooleanGuard, NeverGuard, NumberableGuard, NumberGuard, RecordGuard, StrongEqualityGuard, WeakEqualityGuard } from "mods/guards/index.js"
+import { ArrayAndElementsGuard, ArrayAndTupleGuard, AssertGuard, BigIntableGuard, BigIntGuard, BooleanGuard, FailGuard, FunctionGuard, InterGuard, NumberableGuard, NumberGuard, ObjectGuard, PassGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, UnionGuard, WeakEqualityGuard } from "mods/guards/index.js"
 import { StringableGuard, StringGuard, StringGuardBuilder } from "mods/guards/strings/index.js"
 import { Property } from "mods/props/index.js"
 
@@ -14,7 +14,19 @@ export function readonly<T>(value: T) {
 }
 
 export function any() {
-  return AnyGuard
+  return new PassGuard<any>()
+}
+
+export function unknown() {
+  return new PassGuard<unknown>()
+}
+
+export function pass<T>() {
+  return new PassGuard<T>()
+}
+
+export function fail<T>(message?: string) {
+  return new Errorer(new FailGuard<T>(), (cause) => new Error(message, { cause }))
 }
 
 export function assert<T>() {
@@ -22,7 +34,7 @@ export function assert<T>() {
 }
 
 export function never(message?: string) {
-  return new Errorer(NeverGuard, (cause) => new Error(message, { cause }))
+  return new Errorer(new FailGuard<never>(), (cause) => new Error(message, { cause }))
 }
 
 export function strong<T>(value: Exact<T>, message?: string) {
@@ -53,6 +65,26 @@ export function numberable(message?: string) {
   return new Errorer(NumberableGuard, (cause) => new Error(message, { cause }))
 }
 
+export function bigint(message?: string) {
+  return new Errorer(BigIntGuard, (cause) => new Error(message, { cause }))
+}
+
+export function bigintable(message?: string) {
+  return new Errorer(BigIntableGuard, (cause) => new Error(message, { cause }))
+}
+
+export function object(message?: string) {
+  return new Errorer(ObjectGuard, (cause) => new Error(message, { cause }))
+}
+
+export function callable(message?: string) {
+  return new Errorer(FunctionGuard, (cause) => new Error(message, { cause }))
+}
+
+export function symbol(message?: string) {
+  return new Errorer(SymbolGuard, (cause) => new Error(message, { cause }))
+}
+
 export function array<T extends Guard<any, any>>(value: T, message?: string) {
   return new Errorer(new ArrayAndElementsGuard(value), (cause) => new Error(message, { cause }))
 }
@@ -64,3 +96,14 @@ export function tuple<T extends [Guard<any, any>, ...Guard<any, any>[]]>(value: 
 export function record<T extends { [k: PropertyKey]: Property<Guard<any, any>> }>(value: T, message?: string) {
   return new Errorer(new RecordGuard(value), (cause) => new Error(message, { cause }))
 }
+
+export function inter<A extends Guard.Overloaded<any, any, any>, B extends Guard.Overloaded<Guard.Overloaded.Output<A>, Guard.Overloaded.Output<A>, any>>(left: A, right: B, message?: string) {
+  return new Errorer(new InterGuard(left, right), (cause) => new Error(message, { cause }))
+}
+
+export function union<A extends Guard.Overloaded<any, any, any>, B extends Guard.Overloaded<any, any, any>>(left: A, right: B, message?: string) {
+  return new Errorer(new UnionGuard(left, right), (cause) => new Error(message, { cause }))
+}
+
+
+Guard.asOrThrow(union(string("not a string"), number("not a number"), "not a string nor a number"), 456)
