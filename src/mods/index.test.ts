@@ -31,6 +31,7 @@ await test("rpc", async () => {
   Guard.asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
 })
 
-await test("password", async () => {
-  Guard.asOrThrow(z.string().length(8), "password")
+await test("numberable", async () => {
+  assert(Guard.is(z.numberable().nonNegative(), "123") === true)
+  assert(Guard.is(z.numberable().nonNegative(), "0x123") === true)
 })

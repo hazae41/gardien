@@ -1,7 +1,8 @@
 import { Exact } from "libs/exact/index.js"
 import { Errorer } from "mods/errorer/index.js"
 import { Guard } from "mods/guard/index.js"
-import { ArrayAndElementsGuard, ArrayAndTupleGuard, AssertGuard, BigIntableGuard, BigIntGuard, BooleanGuard, FailGuard, FunctionGuard, InterGuard, NumberableGuard, NumberGuard, ObjectGuard, PassGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, UnionGuard, WeakEqualityGuard } from "mods/guards/index.js"
+import { ArrayAndElementsGuard, ArrayAndTupleGuard, AssertGuard, BigIntableGuard, BigIntGuard, BooleanGuard, FailGuard, FunctionGuard, InterGuard, ObjectGuard, PassGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, UnionGuard, WeakEqualityGuard } from "mods/guards/index.js"
+import { NumberableGuard, NumberGuard, NumberGuardBuilder } from "mods/guards/numbers/index.js"
 import { StringableGuard, StringGuard, StringGuardBuilder } from "mods/guards/strings/index.js"
 import { Property } from "mods/props/index.js"
 
@@ -58,11 +59,11 @@ export function stringable(message?: string) {
 }
 
 export function number(message?: string) {
-  return new Errorer(NumberGuard, (cause) => new Error(message, { cause }))
+  return new NumberGuardBuilder(new Errorer(NumberGuard, (cause) => new Error(message, { cause })))
 }
 
 export function numberable(message?: string) {
-  return new Errorer(NumberableGuard, (cause) => new Error(message, { cause }))
+  return new NumberGuardBuilder(new Errorer(NumberableGuard, (cause) => new Error(message, { cause })))
 }
 
 export function bigint(message?: string) {

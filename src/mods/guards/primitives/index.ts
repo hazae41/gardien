@@ -1,4 +1,3 @@
-
 export class BooleanGuard {
 
   constructor() { }
@@ -21,46 +20,6 @@ export class BooleanGuard {
     if (typeof value !== "boolean")
       throw new Error()
     return value
-  }
-
-}
-
-export class NumberGuard {
-
-  constructor() { }
-
-  static asOrThrow(value: unknown): number
-
-  static asOrThrow(value: number): number
-
-  static asOrThrow(value: unknown): number {
-    if (typeof value !== "number")
-      throw new Error()
-    return value
-  }
-
-  asOrThrow(value: unknown): number
-
-  asOrThrow(value: number): number
-
-  asOrThrow(value: unknown): number {
-    if (typeof value !== "number")
-      throw new Error()
-    return value
-  }
-
-}
-
-export class NumberableGuard {
-
-  constructor() { }
-
-  static asOrThrow(value?: any): number {
-    return Number(value)
-  }
-
-  asOrThrow(value?: any): number {
-    return Number(value)
   }
 
 }
