@@ -2,9 +2,9 @@
 
 Type-safe runtime schema validation and parsing
 
-<!-- ```bash
+```bash
 npm i @hazae41/gardien
-``` -->
+```
 
 [**Node Package 📦**](https://www.npmjs.com/package/@hazae41/gardien)
 
