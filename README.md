@@ -20,6 +20,14 @@ npm i @hazae41/gardien
 
 ## Usage
 
+### Parsing a number
+
+```typescript
+const value = Guard.asOrThrow(z.numberable().nonNegative(), "0x123")
+```
+
+### Validating a complex record
+
 ```typescript
 import { Guard, z } from "@hazae41/gardien"
 
