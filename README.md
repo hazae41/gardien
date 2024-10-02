@@ -69,3 +69,17 @@ class IPv4Guard {
 
 Guard.asOrThrow(z.string().pipe(IPv4Guard, "This is not an IPv4 address"), input)
 ```
+
+### Parsing with your own logic
+
+```typescript
+class ZeroHexlifyGuard {
+
+  static asOrThrow(value: any): `0x${string}` {
+    return `0x${BigInt(value).toString(16)}`
+  }
+
+}
+
+const hex = Guard.asOrThrow(ZeroHexlifyGuard, "12345")
+```
