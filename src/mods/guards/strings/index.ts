@@ -102,3 +102,15 @@ export class StringIncludesGuard<T extends string, S extends string> {
   }
 
 }
+
+class IpAddressGuard {
+
+  constructor() { }
+
+  asOrThrow(value: string): string {
+    if (!/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(value))
+      throw new Error()
+    return value
+  }
+
+}

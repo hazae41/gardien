@@ -53,3 +53,19 @@ function onMessage(message: string) {
   throw new Error("Unknown method")
 }
 ```
+
+### Validating with your own logic
+
+```typescript
+class IPv4Guard {
+
+  static asOrThrow(value: string): string {
+    if (!/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(value))
+      throw new Error()
+    return value
+  }
+
+}
+
+Guard.asOrThrow(z.string().pipe(IPv4Guard, "This is not an IPv4 address"), input)
+```
