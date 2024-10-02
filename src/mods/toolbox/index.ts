@@ -97,13 +97,10 @@ export function record<T extends { [k: PropertyKey]: Property<Guard<any, any>> }
   return new Errorer(new RecordGuard(value), (cause) => new Error(message, { cause }))
 }
 
-export function inter<A extends Guard.Overloaded<any, any, any>, B extends Guard.Overloaded<Guard.Overloaded.Output<A>, Guard.Overloaded.Output<A>, any>>(left: A, right: B, message?: string) {
-  return new Errorer(new InterGuard(left, right), (cause) => new Error(message, { cause }))
+export function inter<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]>(guards: T, message?: string) {
+  return new Errorer(new InterGuard(guards), (cause) => new Error(message, { cause }))
 }
 
-export function union<A extends Guard.Overloaded<any, any, any>, B extends Guard.Overloaded<any, any, any>>(left: A, right: B, message?: string) {
-  return new Errorer(new UnionGuard(left, right), (cause) => new Error(message, { cause }))
+export function union<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]>(guards: T, message?: string) {
+  return new Errorer(new UnionGuard(guards), (cause) => new Error(message, { cause }))
 }
-
-
-Guard.asOrThrow(union(string("not a string"), number("not a number"), "not a string nor a number"), 456)

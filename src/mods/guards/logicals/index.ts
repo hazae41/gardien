@@ -1,47 +1,43 @@
-import { Guard } from "mods/guard/index.js"
+import { Inter } from "libs/inter/index.js";
+import { Guard } from "mods/guard/index.js";
 
-export class InterGuard<A extends Guard.Overloaded<any, any, any>, B extends Guard.Overloaded<Guard.Overloaded.Output<A>, Guard.Overloaded.Output<A>, any>> {
+export class InterGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]> {
 
   constructor(
-    readonly left: A,
-    readonly right: B
+    readonly guards: T
   ) { }
 
-  asOrThrow(value: Guard.Overloaded.Weak<A>): Guard.Overloaded.Output<B>
+  asOrThrow(value: Guard.Overloaded.Weak<T[0]>): Guard.Overloaded.Output<Inter<T[number]>>
 
-  asOrThrow(value: Guard.Overloaded.Strong<B>): Guard.Overloaded.Output<B>
+  asOrThrow(value: Guard.Overloaded.Strong<T[0]>): Guard.Overloaded.Output<Inter<T[number]>>
 
-  asOrThrow(value: Guard.Overloaded.Weak<A>): Guard.Overloaded.Output<B> {
-    return this.right.asOrThrow(this.left.asOrThrow(value))
+  asOrThrow(value: Guard.Overloaded.Weak<T[0]>): Guard.Overloaded.Output<Inter<T[number]>> {
+    for (const guard of this.guards)
+      value = guard.asOrThrow(value)
+    return value as any
   }
 
 }
 
-export class UnionGuard<A extends Guard.Overloaded<any, any, any>, B extends Guard.Overloaded<any, any, any>> {
+export class UnionGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]> {
 
   constructor(
-    readonly left: A,
-    readonly right: B
+    readonly guards: T,
   ) { }
 
-  asOrThrow(value: Guard.Overloaded.Weak<A> | Guard.Overloaded.Weak<B>): (Guard.Overloaded.Output<A> | Guard.Overloaded.Output<B>)
+  asOrThrow(value: Guard.Overloaded.Weak<T[number]>): Guard.Overloaded.Output<T[number]>
 
-  asOrThrow(value: Guard.Overloaded.Strong<A> | Guard.Overloaded.Strong<B>): (Guard.Overloaded.Output<A> | Guard.Overloaded.Output<B>)
+  asOrThrow(value: Guard.Overloaded.Strong<T[number]>): Guard.Overloaded.Output<T[number]>
 
-  asOrThrow(value: Guard.Overloaded.Weak<A> | Guard.Overloaded.Weak<B>): (Guard.Overloaded.Output<A> | Guard.Overloaded.Output<B>) {
+  asOrThrow(value: Guard.Overloaded.Weak<T[number]>): Guard.Overloaded.Output<T[number]> {
     let cause = []
 
-    try {
-      return this.left.asOrThrow(value)
-    } catch (e: unknown) {
-      cause.push(e)
-    }
-
-    try {
-      return this.right.asOrThrow(value)
-    } catch (e: unknown) {
-      cause.push(e)
-    }
+    for (const guard of this.guards)
+      try {
+        return guard.asOrThrow(value)
+      } catch (e: unknown) {
+        cause.push(e)
+      }
 
     throw new Error(undefined, { cause })
   }

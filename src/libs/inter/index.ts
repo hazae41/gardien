@@ -1,0 +1,1 @@
+export type Inter<T> = (T extends any ? (x: T) => void : never) extends (x: infer I extends T) => void ? I : never

@@ -1,6 +1,6 @@
 import { Errorer } from "mods/errorer/index.js"
 import { Guard } from "mods/guard/index.js"
-import { LengthGuard, MaxLengthGuard, Min, MinLengthGuard } from "mods/guards/lengths/index.js"
+import { LengthGuard, MaxLengthGuard, MinLengthGuard } from "mods/guards/lengths/index.js"
 import { InterGuard } from "mods/guards/logicals/index.js"
 
 export class StringableGuard {
@@ -58,7 +58,7 @@ export class StringGuardBuilder<T extends Guard.Overloaded<unknown, unknown, str
   }
 
   pipe<U extends Guard<Guard.Overloaded.Output<T>, string>>(guard: U, message?: string) {
-    return new StringGuardBuilder(new Errorer(new InterGuard(this.guard, guard), (cause) => new Error(message, { cause })))
+    return new StringGuardBuilder(new Errorer(new InterGuard([this.guard, guard] as const), (cause) => new Error(message, { cause })))
   }
 
   min<N extends number>(length: N, message?: string) {
@@ -70,7 +70,7 @@ export class StringGuardBuilder<T extends Guard.Overloaded<unknown, unknown, str
   }
 
   minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
-    return this.pipe(new InterGuard(new MinLengthGuard<Guard.Overloaded.Output<T>, A>(min), new MaxLengthGuard<Guard.Overloaded.Output<T> & { length: Min<A> }, B>(max)), message)
+    return this.pipe(new InterGuard([new MinLengthGuard<Guard.Overloaded.Output<T>, A>(min), new MaxLengthGuard<Guard.Overloaded.Output<T>, B>(max)] as const), message)
   }
 
   length<N extends number>(length: N, message?: string) {
