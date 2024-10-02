@@ -30,7 +30,7 @@ export class MinLengthGuard<T extends { length: number }, N extends number> {
 
   asOrThrow(value: T): T & { length: Min<N> }
 
-  asOrThrow(value: T & { length: Min<N> }): T & { length: Min<N> }
+  asOrThrow(value: T): T & { length: Min<N> }
 
   asOrThrow(value: T): T & { length: Min<N> } {
     if (value.length < this.length)
@@ -54,7 +54,7 @@ export class MaxLengthGuard<T extends { length: number }, N extends number> {
 
   asOrThrow(value: T): T & { length: Max<N> }
 
-  asOrThrow(value: T & { length: Max<N> }): T & { length: Max<N> }
+  asOrThrow(value: T): T & { length: Max<N> }
 
   asOrThrow(value: T): T & { length: Max<N> } {
     if (value.length > this.length)
