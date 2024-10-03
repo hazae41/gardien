@@ -2,13 +2,17 @@ import { Restruct } from "libs/restruct/index.js"
 import { IsSame } from "libs/same/index.js"
 import { Resup } from "libs/supinf/index.js"
 
-export interface Guard<I, O> {
+export interface Guard<I = any, O = any> {
   asOrThrow(value: I): O
 }
 
 export namespace Guard {
 
-  export interface Overloaded<W, S extends W, O> {
+  export type Input<T> = T extends Guard<infer I, any> ? I : never
+
+  export type Output<T> = T extends Guard<any, infer O> ? O : never
+
+  export interface Overloaded<W = any, S extends W = any, O = any> {
     asOrThrow(value: W): O
     asOrThrow(value: S): O
   }

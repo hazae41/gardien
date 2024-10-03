@@ -13,7 +13,7 @@ await test("record string min", async () => {
   assert(result === false)
 })
 
-await test("rpc", async () => {
+await test("unknown rpc", async () => {
   const RpcRequestGuard = z.record({
     jsonrpc: z.strong("2.0"),
     id: z.union([z.strong(null), z.number(), z.string()]),
@@ -29,6 +29,28 @@ await test("rpc", async () => {
   } as const)
 
   Guard.asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
+})
+
+await test("known rpc", async () => {
+  const raw = JSON.stringify({
+    jsonrpc: "2.0",
+    id: 1,
+    method: "example",
+    params: { example: "example" }
+  } as const)
+
+  const RpcRequestGuard = <M extends Guard<string, string>, P extends Guard>(method: M, params: P) => z.record({
+    jsonrpc: z.strong("2.0"),
+    id: z.union([z.strong(null), z.number(), z.string()]),
+    method: method,
+    params: params
+  } as const)
+
+  const ExampleParamsGuard = z.record({
+    example: z.string()
+  } as const)
+
+  Guard.asOrThrow(RpcRequestGuard(z.strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
 })
 
 await test("numberable", async () => {
