@@ -6,12 +6,44 @@ import { NumberableGuard, NumberGuard, NumberGuardBuilder } from "mods/guards/nu
 import { StringableGuard, StringGuard, StringGuardBuilder } from "mods/guards/strings/index.js"
 import { Property } from "mods/props/index.js"
 
+/**
+ * Mark a property as readonly
+ * @example { test: readonly(string()) }: { readonly test: string }
+ * @example PASS: { test: "hello" }
+ * @example FAIL: { test: 1 }
+ * @param value 
+ * @returns 
+ */
+export function readonly<T>(value: T) {
+  return new Property.Readonly(value)
+}
+
+/**
+ * Mark a property as optional and allow undefined values
+ * @example { test: optional(string()) }: { test?: string() }
+ * @example PASS: { test: "hello" }
+ * @example PASS: { test: undefined }
+ * @example PASS: {}
+ * @example FAIL: { test: 1 }
+ * @param value 
+ * @returns 
+ */
 export function optional<T>(value: T) {
   return new Property.Optional(value)
 }
 
-export function readonly<T>(value: T) {
-  return new Property.Readonly(value)
+/**
+ * Like optional but the output type is an union with undefined instead of an optional
+ * @example { test: omitable(string()) }: { test: string() | undefined }
+ * @example PASS: { test: "hello" }
+ * @example PASS: { test: undefined }
+ * @example PASS: {}
+ * @example FAIL: { test: 1 }
+ * @param value 
+ * @returns 
+ */
+export function omitable<T>(value: T) {
+  return new Property.Omitable(value)
 }
 
 export function any() {

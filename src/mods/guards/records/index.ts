@@ -24,6 +24,21 @@ export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>>
     for (const key of Reflect.ownKeys(this.guard)) {
       const guard = this.guard[key]
 
+      if (guard instanceof Property.Readonly) {
+        if (key in value === false) {
+          cause.push(new Error())
+          continue
+        }
+
+        try {
+          result[key] = guard.value.asOrThrow((value as any)[key])
+          continue
+        } catch (e: unknown) {
+          cause.push(e)
+          continue
+        }
+      }
+
       if (guard instanceof Property.Optional) {
         if (key in value === false)
           continue
@@ -39,11 +54,11 @@ export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>>
         }
       }
 
-      if (guard instanceof Property.Readonly) {
-        if (key in value === false) {
-          cause.push(new Error())
+      if (guard instanceof Property.Omitable) {
+        if (key in value === false)
           continue
-        }
+        if ((value as any)[key] === undefined)
+          continue
 
         try {
           result[key] = guard.value.asOrThrow((value as any)[key])

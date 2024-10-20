@@ -18,7 +18,7 @@ await test("unknown rpc", async () => {
     jsonrpc: z.strong("2.0"),
     id: z.union([z.strong(null), z.number(), z.string()]),
     method: z.string(),
-    params: z.optional(z.unknown())
+    params: z.omitable(z.unknown())
   } as const)
 
   const raw = JSON.stringify({
@@ -28,7 +28,13 @@ await test("unknown rpc", async () => {
     params: { example: "example" }
   } as const)
 
-  Guard.asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
+  const x = Guard.asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
+
+  function f(x: { method: string, params: unknown }) {
+    console.log(x)
+  }
+
+  f(x)
 })
 
 await test("known rpc", async () => {
