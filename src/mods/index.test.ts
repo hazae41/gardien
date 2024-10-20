@@ -28,13 +28,7 @@ await test("unknown rpc", async () => {
     params: { example: "example" }
   } as const)
 
-  const x = Guard.asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
-
-  function f(x: { method: string, params: unknown }) {
-    console.log(x)
-  }
-
-  f(x)
+  Guard.asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
 })
 
 await test("known rpc", async () => {
