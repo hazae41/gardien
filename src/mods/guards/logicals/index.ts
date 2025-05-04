@@ -7,11 +7,11 @@ export class InterGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...
     readonly guards: T
   ) { }
 
-  asOrThrow(value: Guard.Overloaded.Weak<T[0]>): Guard.Overloaded.Output<Inter<T[number]>>
+  asOrThrow(value: Guard.Overloaded.Weak<Inter<T[number]>>): Guard.Overloaded.Output<Inter<T[number]>>
 
-  asOrThrow(value: Guard.Overloaded.Strong<T[0]>): Guard.Overloaded.Output<Inter<T[number]>>
+  asOrThrow(value: Guard.Overloaded.Strong<Inter<T[number]>>): Guard.Overloaded.Output<Inter<T[number]>>
 
-  asOrThrow(value: Guard.Overloaded.Weak<T[0]>): Guard.Overloaded.Output<Inter<T[number]>> {
+  asOrThrow(value: Guard.Overloaded.Weak<Inter<T[number]>>): Guard.Overloaded.Output<Inter<T[number]>> {
     for (const guard of this.guards)
       value = guard.asOrThrow(value)
     return value as any
