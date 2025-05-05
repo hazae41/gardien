@@ -1,0 +1,1 @@
+export type Union<T extends readonly any[]> = T extends readonly [infer X, ...infer R] ? X | Union<R> : never

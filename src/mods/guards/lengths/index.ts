@@ -1,65 +1,47 @@
-export class LengthGuard<T extends { length: number }, N extends number> {
+import { MaxNumber, MinNumber } from "../numbers/index.js"
+
+export class LengthGuard<N extends number> {
 
   constructor(
     readonly length: N
   ) { }
 
-  asOrThrow(value: T): T & { length: N }
+  asOrThrow(value: { length: number }): { length: N }
 
-  asOrThrow(value: T & { length: N }): T & { length: N }
+  asOrThrow(value: { length: N }): { length: N }
 
-  asOrThrow(value: T): T & { length: N } {
+  asOrThrow(value: { length: number }): { length: N } {
     if (value.length !== this.length)
       throw new Error()
-    return value as T & { length: N }
+    return value as { length: N }
   }
 
 }
 
-declare const MinSymbol: unique symbol
-
-export interface Min<N extends number> {
-  readonly [MinSymbol]: N
-}
-
-export class MinLengthGuard<T extends { length: number }, N extends number> {
+export class MinLengthGuard<N extends number> {
 
   constructor(
     readonly length: N
   ) { }
 
-  asOrThrow(value: T): T & { length: Min<N> }
-
-  asOrThrow(value: T & { length: Min<N> }): T & { length: Min<N> }
-
-  asOrThrow(value: T): T & { length: Min<N> } {
+  asOrThrow(value: { length: number }): { length: MinNumber<N> } {
     if (value.length < this.length)
       throw new Error()
-    return value as T & { length: Min<N> }
+    return value as { length: MinNumber<N> }
   }
 
 }
 
-declare const MaxSymbol: unique symbol
-
-export interface Max<N extends number> {
-  readonly [MaxSymbol]: N
-}
-
-export class MaxLengthGuard<T extends { length: number }, N extends number> {
+export class MaxLengthGuard<N extends number> {
 
   constructor(
     readonly length: N
   ) { }
 
-  asOrThrow(value: T): T & { length: Max<N> }
-
-  asOrThrow(value: T & { length: Max<N> }): T & { length: Max<N> }
-
-  asOrThrow(value: T): T & { length: Max<N> } {
+  asOrThrow(value: { length: number }): { length: MaxNumber<N> } {
     if (value.length > this.length)
       throw new Error()
-    return value as T & { length: Max<N> }
+    return value as { length: MaxNumber<N> }
   }
 
 }

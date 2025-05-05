@@ -42,7 +42,7 @@ export class ElementsGuard<T extends Guard<any, any>> {
 
 }
 
-export class ArrayAndElementsGuard<T extends Guard<unknown, any>> {
+export class ArrayAndElementsGuard<T extends Guard<any, any>> {
 
   constructor(
     readonly guard: T

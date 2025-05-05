@@ -42,7 +42,7 @@ export class NumberGuard {
 
 }
 
-export class NumberGuardBuilder<T extends Guard.Overloaded<unknown, unknown, number>> {
+export class NumberGuardBuilder<T extends Guard<any, any>> {
 
   constructor(
     readonly guard: T
@@ -52,116 +52,160 @@ export class NumberGuardBuilder<T extends Guard.Overloaded<unknown, unknown, num
 
   asOrThrow(value: Guard.Overloaded.Strong<T>): Guard.Overloaded.Output<T>
 
-  asOrThrow(this: NumberGuardBuilder<Guard.Overloaded.Infer<T>>, value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
+  asOrThrow(value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
     return this.guard.asOrThrow(value)
   }
 
-  pipe<U extends Guard<Guard.Overloaded.Output<T>, number>>(guard: U, message?: string) {
+  inter<U extends Guard<any, any>>(guard: U, message?: string) {
     return new NumberGuardBuilder(new Errorer(new InterGuard([this.guard, guard] as const), (cause) => new Error(message, { cause })))
   }
 
   positive(message?: string) {
-    return this.pipe(new PositiveNumberGuard<Guard.Overloaded.Output<T>>(), message)
+    return this.inter(PositiveNumberGuard, message)
   }
 
   negative(message?: string) {
-    return this.pipe(new NegativeNumberGuard<Guard.Overloaded.Output<T>>(), message)
+    return this.inter(NegativeNumberGuard, message)
   }
 
   nonPositive(message?: string) {
-    return this.pipe(new NonPositiveNumberGuard<Guard.Overloaded.Output<T>>(), message)
+    return this.inter(NonPositiveNumberGuard, message)
   }
 
   nonNegative(message?: string) {
-    return this.pipe(new NonNegativeNumberGuard<Guard.Overloaded.Output<T>>(), message)
+    return this.inter(NonNegativeNumberGuard, message)
+  }
+
+  min<N extends number>(value: N, message?: string) {
+    return this.inter(new MinNumberGuard<N>(value), message)
+  }
+
+  max<N extends number>(value: N, message?: string) {
+    return this.inter(new MaxNumberGuard<N>(value), message)
+  }
+
+  minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
+    return this.inter(new InterGuard([new MinNumberGuard<A>(min), new MaxNumberGuard<B>(max)] as const), message)
   }
 
 }
 
 declare const PositiveNumberSymbol: unique symbol
 
-export interface PositiveNumber {
-  readonly [PositiveNumberSymbol]: true
-}
+export type PositiveNumber = number & { [PositiveNumberSymbol]: true }
 
-export class PositiveNumberGuard<T extends number> {
+export class PositiveNumberGuard {
 
-  static asOrThrow<T extends number>(value: T): T & PositiveNumber {
+  static asOrThrow(value: number): PositiveNumber {
     if (value <= 0)
       throw new Error()
-    return value as T & PositiveNumber
+    return value as PositiveNumber
   }
 
-  asOrThrow(value: T): T & PositiveNumber {
+  asOrThrow(value: number): PositiveNumber {
     if (value <= 0)
       throw new Error()
-    return value as T & PositiveNumber
+    return value as PositiveNumber
   }
 
 }
 
 declare const NegativeNumberSymbol: unique symbol
 
-export interface NegativeNumber {
-  readonly [NegativeNumberSymbol]: true
-}
+export type NegativeNumber = number & { [NegativeNumberSymbol]: true }
 
-export class NegativeNumberGuard<T extends number> {
+export class NegativeNumberGuard {
 
-  static asOrThrow<T extends number>(value: T): T & NegativeNumber {
+  static asOrThrow(value: number): NegativeNumber {
     if (value >= 0)
       throw new Error()
-    return value as T & NegativeNumber
+    return value as NegativeNumber
   }
 
-  asOrThrow(value: T): T & NegativeNumber {
+  asOrThrow(value: number): NegativeNumber {
     if (value >= 0)
       throw new Error()
-    return value as T & NegativeNumber
+    return value as NegativeNumber
   }
 
 }
 
 declare const NonPositiveNumberSymbol: unique symbol
 
-export interface NonPositiveNumber {
-  readonly [NonPositiveNumberSymbol]: true
-}
+export type NonPositiveNumber = number & { [NonPositiveNumberSymbol]: true }
 
-export class NonPositiveNumberGuard<T extends number> {
+export class NonPositiveNumberGuard {
 
-  static asOrThrow<T extends number>(value: T): T & NonPositiveNumber {
+  static asOrThrow(value: number): NonPositiveNumber {
     if (value > 0)
       throw new Error()
-    return value as T & NonPositiveNumber
+    return value as NonPositiveNumber
   }
 
-  asOrThrow(value: T): T & NonPositiveNumber {
+  asOrThrow(value: number): NonPositiveNumber {
     if (value > 0)
       throw new Error()
-    return value as T & NonPositiveNumber
+    return value as NonPositiveNumber
   }
 
 }
 
 declare const NonNegativeNumberSymbol: unique symbol
 
-export interface NonNegativeNumber {
-  readonly [NonNegativeNumberSymbol]: true
-}
+export type NonNegativeNumber = number & { [NonNegativeNumberSymbol]: true }
 
-export class NonNegativeNumberGuard<T extends number> {
+export class NonNegativeNumberGuard {
 
-  static asOrThrow<T extends number>(value: T): T & NonNegativeNumber {
+  static asOrThrow(value: number): NonNegativeNumber {
     if (value < 0)
       throw new Error()
-    return value as T & NonNegativeNumber
+    return value as NonNegativeNumber
   }
 
-  asOrThrow(value: T): T & NonNegativeNumber {
+  asOrThrow(value: number): NonNegativeNumber {
     if (value < 0)
       throw new Error()
-    return value as T & NonNegativeNumber
+    return value as NonNegativeNumber
+  }
+
+}
+
+declare const MinSymbol: unique symbol
+
+export type Min<X> = symbol & { [MinSymbol]: X }
+
+export type MinNumber<N extends number> = number & { [k in Min<N>]: true }
+
+export class MinNumberGuard<N extends number> {
+
+  constructor(
+    readonly value: N
+  ) { }
+
+  asOrThrow(value: number): MinNumber<N> {
+    if (value < this.value)
+      throw new Error()
+    return value as MinNumber<N>
+  }
+
+}
+
+declare const MaxSymbol: unique symbol
+
+export type Max<X> = symbol & { [MaxSymbol]: X }
+
+export type MaxNumber<N extends number> = number & { [k in Max<N>]: true }
+
+export class MaxNumberGuard<N extends number> {
+
+  constructor(
+    readonly value: N
+  ) { }
+
+  asOrThrow(value: number): MaxNumber<N> {
+    if (value > this.value)
+      throw new Error()
+    return value as MaxNumber<N>
   }
 
 }

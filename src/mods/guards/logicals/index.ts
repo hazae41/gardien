@@ -1,4 +1,5 @@
 import { Inter } from "libs/inter/index.js";
+import { Union } from "libs/union/index.js";
 import { Guard } from "mods/guard/index.js";
 
 export class InterGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]> {
@@ -7,11 +8,11 @@ export class InterGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...
     readonly guards: T
   ) { }
 
-  asOrThrow(value: Guard.Overloaded.Weak<Inter<T[number]>>): Guard.Overloaded.Output<Inter<T[number]>>
+  asOrThrow(value: Union<Guard.Overloaded.AllWeak<T>>): Inter<Guard.Overloaded.AllOutput<T>>
 
-  asOrThrow(value: Guard.Overloaded.Strong<Inter<T[number]>>): Guard.Overloaded.Output<Inter<T[number]>>
+  asOrThrow(value: Inter<Guard.Overloaded.AllStrong<T>>): Inter<Guard.Overloaded.AllOutput<T>>
 
-  asOrThrow(value: Guard.Overloaded.Weak<Inter<T[number]>>): Guard.Overloaded.Output<Inter<T[number]>> {
+  asOrThrow(value: unknown): Inter<Guard.Overloaded.AllOutput<T>> {
     for (const guard of this.guards)
       value = guard.asOrThrow(value)
     return value as any
@@ -25,11 +26,11 @@ export class UnionGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...
     readonly guards: T,
   ) { }
 
-  asOrThrow(value: Guard.Overloaded.Weak<T[number]>): Guard.Overloaded.Output<T[number]>
+  asOrThrow(value: Union<Guard.Overloaded.AllWeak<T>>): Union<Guard.Overloaded.AllOutput<T>>
 
-  asOrThrow(value: Guard.Overloaded.Strong<T[number]>): Guard.Overloaded.Output<T[number]>
+  asOrThrow(value: Union<Guard.Overloaded.AllStrong<T>>): Union<Guard.Overloaded.AllOutput<T>>
 
-  asOrThrow(value: Guard.Overloaded.Weak<T[number]>): Guard.Overloaded.Output<T[number]> {
+  asOrThrow(value: unknown): Union<Guard.Overloaded.AllOutput<T>> {
     let cause = []
 
     for (const guard of this.guards)
