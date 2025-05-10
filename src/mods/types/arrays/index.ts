@@ -1,4 +1,4 @@
-import { Guard } from "mods/core/mods/guard/index.js"
+import { Guard } from "mods/guard/index.js"
 
 export class ArrayGuard {
 

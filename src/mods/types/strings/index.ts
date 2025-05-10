@@ -1,7 +1,7 @@
-import { Errorer } from "mods/core/mods/errorer/index.js"
-import { Guard } from "mods/core/mods/guard/index.js"
-import { LengthGuard, MaxLengthGuard, MinLengthGuard } from "mods/core/mods/types/lengths/index.js"
-import { InterGuard } from "mods/core/mods/types/logicals/index.js"
+import { Errorer } from "mods/errorer/index.js"
+import { Guard } from "mods/guard/index.js"
+import { LengthGuard, MaxLengthGuard, MinLengthGuard } from "mods/types/lengths/index.js"
+import { InterGuard } from "mods/types/logicals/index.js"
 
 export class StringableGuard {
 

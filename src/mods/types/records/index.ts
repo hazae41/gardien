@@ -1,5 +1,5 @@
-import { Guard } from "mods/core/mods/guard/index.js"
-import { Property } from "mods/core/mods/props/index.js"
+import { Guard } from "mods/guard/index.js"
+import { Property } from "mods/props/index.js"
 
 export class RecordGuard<T extends { [k: PropertyKey]: Property<Guard<any, any>> }> {
 
