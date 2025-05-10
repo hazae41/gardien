@@ -37,6 +37,11 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/esm/index.mjs",
       "require": "./dist/cjs/index.cjs"
+    },
+    "z": {
+      "types": "./dist/types/guards/index.d.ts",
+      "import": "./dist/esm/guards/index.mjs",
+      "require": "./dist/cjs/guards/index.cjs"
     }
   },
   "keywords": [

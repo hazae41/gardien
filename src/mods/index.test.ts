@@ -1,11 +1,10 @@
 import { assert, test } from "@hazae41/phobos";
-import { Guard } from "./guard/index.js";
-import { z } from "./index.js";
-import { record, string } from "./toolbox/index.js";
+import { asOrThrow, Guard, is } from "./guard/index.js";
+import * as z from "./guards/index.js";
 
 await test("record string min", async () => {
-  const result = Guard.is(record({
-    aaa: string().min(6)
+  const result = is(z.record({
+    aaa: z.string().min(6)
   } as const), {
     aaa: "aaa"
   } as const)
@@ -28,7 +27,7 @@ await test("unknown rpc", async () => {
     params: { example: "example" }
   } as const)
 
-  Guard.asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
+  asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
 })
 
 await test("known rpc", async () => {
@@ -50,10 +49,10 @@ await test("known rpc", async () => {
     example: z.string()
   } as const)
 
-  Guard.asOrThrow(RpcRequestGuard(z.strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
+  asOrThrow(RpcRequestGuard(z.strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
 })
 
 await test("numberable", async () => {
-  assert(Guard.is(z.numberable().nonNegative(), "123") === true)
-  assert(Guard.is(z.numberable().nonNegative(), "0x123") === true)
+  assert(is(z.numberable().nonNegative(), "123") === true)
+  assert(is(z.numberable().nonNegative(), "0x123") === true)
 })

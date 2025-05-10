@@ -52,26 +52,26 @@ export namespace Guard {
 
   }
 
-  export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> {
+}
+
+export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> {
+  return guard.asOrThrow(value)
+}
+
+export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> | null {
+  try {
     return guard.asOrThrow(value)
+  } catch {
+    return null
   }
+}
 
-  export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> | null {
-    try {
-      return guard.asOrThrow(value)
-    } catch {
-      return null
-    }
+export function is<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): value is Guard.Overloaded.Guarded<X, T> {
+  try {
+    guard.asOrThrow(value)
+
+    return true
+  } catch {
+    return false
   }
-
-  export function is<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): value is Guard.Overloaded.Guarded<X, T> {
-    try {
-      guard.asOrThrow(value)
-
-      return true
-    } catch {
-      return false
-    }
-  }
-
 }
