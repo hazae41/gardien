@@ -1,10 +1,10 @@
 import { Exact } from "libs/exact/index.js"
-import { Errorer } from "mods/errorer/index.js"
-import { Guard } from "mods/guard/index.js"
-import { Property } from "mods/props/index.js"
-import { ArrayAndElementsGuard, ArrayAndTupleGuard, AssertGuard, BigIntableGuard, BigIntGuard, BooleanGuard, FailGuard, FunctionGuard, InterGuard, ObjectGuard, PassGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, UnionGuard, WeakEqualityGuard } from "mods/types/index.js"
-import { NumberableGuard, NumberGuard, NumberGuardBuilder } from "mods/types/numbers/index.js"
-import { StringableGuard, StringGuard, StringGuardBuilder } from "mods/types/strings/index.js"
+import { Errorer } from "mods/core/mods/errorer/index.js"
+import { Guard } from "mods/core/mods/guard/index.js"
+import { Property } from "mods/core/mods/props/index.js"
+import { ArrayAndElementsGuard, ArrayAndTupleGuard, AssertGuard, BigIntableGuard, BigIntGuard, BooleanGuard, FailGuard, FunctionGuard, InterGuard, ObjectGuard, PassGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, UnionGuard, WeakEqualityGuard } from "mods/core/mods/types/index.js"
+import { NumberableGuard, NumberGuard, NumberGuardBuilder } from "mods/core/mods/types/numbers/index.js"
+import { StringableGuard, StringGuard, StringGuardBuilder } from "mods/core/mods/types/strings/index.js"
 
 /**
  * Mark a property as readonly

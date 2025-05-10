@@ -1,6 +1,6 @@
 import { Inter } from "libs/inter/index.js";
 import { Union } from "libs/union/index.js";
-import { Guard } from "mods/guard/index.js";
+import { Guard } from "mods/core/mods/guard/index.js";
 
 export class InterGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]> {
 

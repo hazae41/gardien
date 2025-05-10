@@ -1,5 +1,5 @@
-import { Errorer } from "mods/errorer/index.js"
-import { Guard } from "mods/guard/index.js"
+import { Errorer } from "mods/core/mods/errorer/index.js"
+import { Guard } from "mods/core/mods/guard/index.js"
 import { InterGuard } from "../logicals/index.js"
 
 export class NumberableGuard {

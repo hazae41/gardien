@@ -8,8 +8,8 @@
   "author": "hazae41",
   "license": "MIT",
   "main": "./dist/cjs/index.cjs",
-  "module": "./dist/esm/index.mjs",
-  "types": "./dist/types/index.d.ts",
+  "module": "./dist/esm/mods/core/index.mjs",
+  "types": "./dist/types/mods/core/index.d.ts",
   "sideEffects": false,
   "files": [
     "./dist/esm",
@@ -34,14 +34,14 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.cjs"
+      "types": "./dist/types/mods/core/index.d.ts",
+      "import": "./dist/esm/mods/core/index.mjs",
+      "require": "./dist/cjs/mods/core/index.cjs"
     },
     "z": {
-      "types": "./dist/types/guards/index.d.ts",
-      "import": "./dist/esm/guards/index.mjs",
-      "require": "./dist/cjs/guards/index.cjs"
+      "types": "./dist/types/mods/guards/index.d.ts",
+      "import": "./dist/esm/mods/guards/index.mjs",
+      "require": "./dist/cjs/mods/guards/index.cjs"
     }
   },
   "keywords": [
