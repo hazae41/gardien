@@ -7,7 +7,7 @@
   "repository": "github:hazae41/gardien",
   "author": "hazae41",
   "license": "MIT",
-  "main": "./dist/cjs/index.cjs",
+  "main": "./dist/cjs/mods/core/index.cjs",
   "module": "./dist/esm/mods/core/index.mjs",
   "types": "./dist/types/mods/core/index.d.ts",
   "sideEffects": false,
