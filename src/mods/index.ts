@@ -1,7 +1,6 @@
-export * as Guards from "./guards/index.js"
-
 export * from "./errorer/index.js"
 export * from "./guard/index.js"
+export * from "./guards/index.js"
 export * from "./props/index.js"
 export * from "./types/index.js"
 

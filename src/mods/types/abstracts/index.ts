@@ -22,7 +22,7 @@ export class FailGuard<T> {
 
 }
 
-export class AssertGuard<T> {
+export class AsGuard<T> {
 
   asOrThrow(value: unknown): T
 

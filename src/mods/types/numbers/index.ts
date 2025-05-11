@@ -1,6 +1,3 @@
-import { Errorer } from "mods/errorer/index.js"
-import { Guard } from "mods/guard/index.js"
-import { InterGuard } from "../logicals/index.js"
 
 export class NumberableGuard {
 
@@ -38,54 +35,6 @@ export class NumberGuard {
     if (typeof value !== "number")
       throw new Error()
     return value
-  }
-
-}
-
-export class NumberGuardBuilder<T extends Guard<any, any>> {
-
-  constructor(
-    readonly guard: T
-  ) { }
-
-  asOrThrow(value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T>
-
-  asOrThrow(value: Guard.Overloaded.Strong<T>): Guard.Overloaded.Output<T>
-
-  asOrThrow(value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
-    return this.guard.asOrThrow(value)
-  }
-
-  inter<U extends Guard<any, any>>(guard: U, message?: string) {
-    return new NumberGuardBuilder(new Errorer(new InterGuard([this.guard, guard] as const), (cause) => new Error(message, { cause })))
-  }
-
-  positive(message?: string) {
-    return this.inter(PositiveNumberGuard, message)
-  }
-
-  negative(message?: string) {
-    return this.inter(NegativeNumberGuard, message)
-  }
-
-  nonPositive(message?: string) {
-    return this.inter(NonPositiveNumberGuard, message)
-  }
-
-  nonNegative(message?: string) {
-    return this.inter(NonNegativeNumberGuard, message)
-  }
-
-  min<N extends number>(value: N, message?: string) {
-    return this.inter(new MinNumberGuard<N>(value), message)
-  }
-
-  max<N extends number>(value: N, message?: string) {
-    return this.inter(new MaxNumberGuard<N>(value), message)
-  }
-
-  minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
-    return this.inter(new InterGuard([new MinNumberGuard<A>(min), new MaxNumberGuard<B>(max)] as const), message)
   }
 
 }

@@ -1,7 +1,3 @@
-import { Errorer } from "mods/errorer/index.js"
-import { Guard } from "mods/guard/index.js"
-import { LengthGuard, MaxLengthGuard, MinLengthGuard } from "mods/types/lengths/index.js"
-import { InterGuard } from "mods/types/logicals/index.js"
 
 export class StringableGuard {
 
@@ -39,58 +35,6 @@ export class StringGuard {
     if (typeof value !== "string")
       throw new Error()
     return value
-  }
-
-}
-
-export class StringGuardBuilder<T extends Guard<any, any>> {
-
-  constructor(
-    readonly guard: T
-  ) { }
-
-  asOrThrow(value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T>
-
-  asOrThrow(value: Guard.Overloaded.Strong<T>): Guard.Overloaded.Output<T>
-
-  asOrThrow(value: Guard.Overloaded.Weak<T>): Guard.Overloaded.Output<T> {
-    return this.guard.asOrThrow(value)
-  }
-
-  inter<U extends Guard<any, any>>(guard: U, message?: string) {
-    return new StringGuardBuilder(new Errorer(new InterGuard([this.guard, guard] as const), (cause) => new Error(message, { cause })))
-  }
-
-  min<N extends number>(length: N, message?: string) {
-    return this.inter(new MinLengthGuard<N>(length), message)
-  }
-
-  max<N extends number>(length: N, message?: string) {
-    return this.inter(new MaxLengthGuard<N>(length), message)
-  }
-
-  minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
-    return this.inter(new InterGuard([new MinLengthGuard<A>(min), new MaxLengthGuard<B>(max)] as const), message)
-  }
-
-  length<N extends number>(length: N, message?: string) {
-    return this.inter(new LengthGuard<N>(length), message)
-  }
-
-  includes<S extends string>(value: S, message?: string) {
-    return this.inter(new StringIncludingGuard<S>(value), message)
-  }
-
-  startsWith<S extends string>(value: S, message?: string) {
-    return this.inter(new StringStartingWithGuard<S>(value), message)
-  }
-
-  endsWith<S extends string>(value: S, message?: string) {
-    return this.inter(new StringEndingWithGuard<S>(value), message)
-  }
-
-  matches<X extends RegExp>(value: X, message?: string) {
-    return this.inter(new StringMatchingGuard<X>(value), message)
   }
 
 }
