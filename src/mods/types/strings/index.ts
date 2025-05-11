@@ -39,11 +39,11 @@ export class StringGuard {
 
 }
 
-declare const IncludingSymbol: unique symbol
+export type IncludingSymbol = symbol & { readonly name: "IncludingSymbol" }
 
-export type Including<X> = symbol & { readonly [IncludingSymbol]: X }
+export type IncludingSymbol2<X> = symbol & { readonly [k: IncludingSymbol]: X }
 
-export type StringIncluding<S extends string> = string & { readonly [k in Including<S>]: true }
+export type StringIncluding<S extends string> = string & { readonly [k: IncludingSymbol2<S>]: true }
 
 export class StringIncludingGuard<S extends string> {
 
@@ -59,11 +59,11 @@ export class StringIncludingGuard<S extends string> {
 
 }
 
-declare const StartingWithSymbol: unique symbol
+export type StartingWithSymbol = symbol & { readonly name: "StartingWithSymbol" }
 
-export type StartingWith<X> = symbol & { readonly [StartingWithSymbol]: X }
+export type StartingWithSymbol2<X> = symbol & { readonly [k: StartingWithSymbol]: X }
 
-export type StringStartingWith<S extends string> = string & { readonly [k in StartingWith<S>]: true }
+export type StringStartingWith<S extends string> = string & { readonly [k: StartingWithSymbol2<S>]: true }
 
 export class StringStartingWithGuard<S extends string> {
 
@@ -79,11 +79,11 @@ export class StringStartingWithGuard<S extends string> {
 
 }
 
-declare const EndingWithSymbol: unique symbol
+export type EndingWithSymbol = symbol & { readonly name: "EndingWithSymbol" }
 
-export type EndingWith<X> = symbol & { readonly [EndingWithSymbol]: X }
+export type EndingWithSymbol2<X> = symbol & { readonly [k: EndingWithSymbol]: X }
 
-export type StringEndingWith<S extends string> = string & { readonly [k in EndingWith<S>]: true }
+export type StringEndingWith<S extends string> = string & { readonly [k: EndingWithSymbol2<S>]: true }
 
 export class StringEndingWithGuard<S extends string> {
 
@@ -99,11 +99,11 @@ export class StringEndingWithGuard<S extends string> {
 
 }
 
-declare const MatchingSymbol: unique symbol
+export type MatchingSymbol = symbol & { readonly name: "MatchingSymbol" }
 
-export type Matching<X> = symbol & { readonly [MatchingSymbol]: X }
+export type MatchingSymbol2<X> = symbol & { readonly [k: MatchingSymbol]: X }
 
-export type StringMatching<S extends RegExp> = string & { readonly [k in Matching<S>]: true }
+export type StringMatching<S extends RegExp> = string & { readonly [k: MatchingSymbol2<S>]: true }
 
 export class StringMatchingGuard<X extends RegExp> {
 

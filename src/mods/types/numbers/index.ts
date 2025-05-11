@@ -39,9 +39,9 @@ export class NumberGuard {
 
 }
 
-declare const PositiveNumberSymbol: unique symbol
+export type PositiveNumberSymbol = symbol & { readonly name: "PositiveNumberSymbol" }
 
-export type PositiveNumber = number & { readonly [PositiveNumberSymbol]: true }
+export type PositiveNumber = number & { readonly [k: PositiveNumberSymbol]: true }
 
 export class PositiveNumberGuard {
 
@@ -59,9 +59,9 @@ export class PositiveNumberGuard {
 
 }
 
-declare const NegativeNumberSymbol: unique symbol
+export type NegativeNumberSymbol = symbol & { readonly name: "NegativeNumberSymbol" }
 
-export type NegativeNumber = number & { readonly [NegativeNumberSymbol]: true }
+export type NegativeNumber = number & { readonly [k: NegativeNumberSymbol]: true }
 
 export class NegativeNumberGuard {
 
@@ -79,9 +79,9 @@ export class NegativeNumberGuard {
 
 }
 
-declare const NonPositiveNumberSymbol: unique symbol
+export type NonPositiveNumberSymbol = symbol & { readonly name: "NonPositiveNumberSymbol" }
 
-export type NonPositiveNumber = number & { readonly [NonPositiveNumberSymbol]: true }
+export type NonPositiveNumber = number & { readonly [k: NonPositiveNumberSymbol]: true }
 
 export class NonPositiveNumberGuard {
 
@@ -99,9 +99,9 @@ export class NonPositiveNumberGuard {
 
 }
 
-declare const NonNegativeNumberSymbol: unique symbol
+export type NonNegativeNumberSymbol = symbol & { readonly name: "NonNegativeNumberSymbol" }
 
-export type NonNegativeNumber = number & { readonly [NonNegativeNumberSymbol]: true }
+export type NonNegativeNumber = number & { readonly [k: NonNegativeNumberSymbol]: true }
 
 export class NonNegativeNumberGuard {
 
@@ -119,11 +119,11 @@ export class NonNegativeNumberGuard {
 
 }
 
-declare const MinSymbol: unique symbol
+export type MinSymbol = symbol & { readonly name: "MinSymbol" }
 
-export type Min<X> = symbol & { readonly [MinSymbol]: X }
+export type MinSymbol2<X> = symbol & { readonly [k: MinSymbol]: X }
 
-export type MinNumber<N extends number> = number & { readonly [k in Min<N>]: true }
+export type MinNumber<N extends number> = number & { readonly [k: MinSymbol2<N>]: true }
 
 export class MinNumberGuard<N extends number> {
 
@@ -139,11 +139,11 @@ export class MinNumberGuard<N extends number> {
 
 }
 
-declare const MaxSymbol: unique symbol
+export type MaxSymbol = symbol & { readonly name: "MaxSymbol" }
 
-export type Max<X> = symbol & { readonly [MaxSymbol]: X }
+export type MaxSymbol2<X> = symbol & { readonly [k: MaxSymbol]: X }
 
-export type MaxNumber<N extends number> = number & { readonly [k in Max<N>]: true }
+export type MaxNumber<N extends number> = number & { readonly [k: MaxSymbol2<N>]: true }
 
 export class MaxNumberGuard<N extends number> {
 
