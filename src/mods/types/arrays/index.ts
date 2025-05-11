@@ -36,7 +36,7 @@ export class ElementsGuard<T extends Guard<any, any>> {
 
   asOrThrow(value: readonly Guard.Overloaded.Strong<T>[]): readonly Guard.Overloaded.Output<T>[]
 
-  asOrThrow(this: ElementsGuard<Guard.Overloaded.Infer<T>>, value: readonly Guard.Overloaded.Weak<T>[]): readonly Guard.Overloaded.Output<T>[] {
+  asOrThrow(value: readonly Guard.Overloaded.Weak<T>[]): readonly Guard.Overloaded.Output<T>[] {
     return value.map(x => this.guard.asOrThrow(x))
   }
 
@@ -52,7 +52,7 @@ export class ArrayAndElementsGuard<T extends Guard<any, any>> {
 
   asOrThrow(value: readonly Guard.Overloaded.Strong<T>[]): readonly Guard.Overloaded.Output<T>[]
 
-  asOrThrow(this: ArrayAndElementsGuard<Guard.Overloaded.Infer<T>>, value: unknown): Guard.Overloaded.Output<T>[] {
+  asOrThrow(value: unknown): Guard.Overloaded.Output<T>[] {
     if (!Array.isArray(value))
       throw new Error()
     return value.map(x => this.guard.asOrThrow(x))
@@ -70,7 +70,7 @@ export class TupleGuard<T extends readonly Guard<any, any>[]> {
 
   asOrThrow(value: Guard.Overloaded.AllStrong<T>): Guard.Overloaded.AllOutput<T>
 
-  asOrThrow(this: TupleGuard<Guard.Overloaded.AllInfer<T>>, value: Guard.Overloaded.AllWeak<T>): Guard.Overloaded.AllOutput<T> {
+  asOrThrow(value: Guard.Overloaded.AllWeak<T>): Guard.Overloaded.AllOutput<T> {
     if (value.length !== this.guards.length)
       throw new Error()
     return value.map((x, i) => this.guards[i].asOrThrow(x)) as Guard.Overloaded.AllOutput<T>
@@ -88,7 +88,7 @@ export class ArrayAndTupleGuard<T extends readonly Guard<any, any>[]> {
 
   asOrThrow(value: Guard.Overloaded.AllStrong<T>): Guard.Overloaded.AllOutput<T>
 
-  asOrThrow(this: TupleGuard<Guard.Overloaded.AllInfer<T>>, value: unknown): Guard.Overloaded.AllOutput<T> {
+  asOrThrow(value: unknown): Guard.Overloaded.AllOutput<T> {
     if (!Array.isArray(value))
       throw new Error()
     if (value.length !== this.guards.length)
