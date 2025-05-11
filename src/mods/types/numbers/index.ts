@@ -41,7 +41,7 @@ export class NumberGuard {
 
 declare const PositiveNumberSymbol: unique symbol
 
-export type PositiveNumber = number & { [PositiveNumberSymbol]: true }
+export type PositiveNumber = number & { readonly [PositiveNumberSymbol]: true }
 
 export class PositiveNumberGuard {
 
@@ -61,7 +61,7 @@ export class PositiveNumberGuard {
 
 declare const NegativeNumberSymbol: unique symbol
 
-export type NegativeNumber = number & { [NegativeNumberSymbol]: true }
+export type NegativeNumber = number & { readonly [NegativeNumberSymbol]: true }
 
 export class NegativeNumberGuard {
 
@@ -81,7 +81,7 @@ export class NegativeNumberGuard {
 
 declare const NonPositiveNumberSymbol: unique symbol
 
-export type NonPositiveNumber = number & { [NonPositiveNumberSymbol]: true }
+export type NonPositiveNumber = number & { readonly [NonPositiveNumberSymbol]: true }
 
 export class NonPositiveNumberGuard {
 
@@ -101,7 +101,7 @@ export class NonPositiveNumberGuard {
 
 declare const NonNegativeNumberSymbol: unique symbol
 
-export type NonNegativeNumber = number & { [NonNegativeNumberSymbol]: true }
+export type NonNegativeNumber = number & { readonly [NonNegativeNumberSymbol]: true }
 
 export class NonNegativeNumberGuard {
 
@@ -121,9 +121,9 @@ export class NonNegativeNumberGuard {
 
 declare const MinSymbol: unique symbol
 
-export type Min<X> = symbol & { [MinSymbol]: X }
+export type Min<X> = symbol & { readonly [MinSymbol]: X }
 
-export type MinNumber<N extends number> = number & { [k in Min<N>]: true }
+export type MinNumber<N extends number> = number & { readonly [k in Min<N>]: true }
 
 export class MinNumberGuard<N extends number> {
 
@@ -141,9 +141,9 @@ export class MinNumberGuard<N extends number> {
 
 declare const MaxSymbol: unique symbol
 
-export type Max<X> = symbol & { [MaxSymbol]: X }
+export type Max<X> = symbol & { readonly [MaxSymbol]: X }
 
-export type MaxNumber<N extends number> = number & { [k in Max<N>]: true }
+export type MaxNumber<N extends number> = number & { readonly [k in Max<N>]: true }
 
 export class MaxNumberGuard<N extends number> {
 

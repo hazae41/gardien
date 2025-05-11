@@ -41,9 +41,9 @@ export class StringGuard {
 
 declare const IncludingSymbol: unique symbol
 
-export type Including<X> = symbol & { [IncludingSymbol]: X }
+export type Including<X> = symbol & { readonly [IncludingSymbol]: X }
 
-export type StringIncluding<S extends string> = string & { [k in Including<S>]: true }
+export type StringIncluding<S extends string> = string & { readonly [k in Including<S>]: true }
 
 export class StringIncludingGuard<S extends string> {
 
@@ -61,9 +61,9 @@ export class StringIncludingGuard<S extends string> {
 
 declare const StartingWithSymbol: unique symbol
 
-export type StartingWith<X> = symbol & { [StartingWithSymbol]: X }
+export type StartingWith<X> = symbol & { readonly [StartingWithSymbol]: X }
 
-export type StringStartingWith<S extends string> = string & { [k in StartingWith<S>]: true }
+export type StringStartingWith<S extends string> = string & { readonly [k in StartingWith<S>]: true }
 
 export class StringStartingWithGuard<S extends string> {
 
@@ -81,9 +81,9 @@ export class StringStartingWithGuard<S extends string> {
 
 declare const EndingWithSymbol: unique symbol
 
-export type EndingWith<X> = symbol & { [EndingWithSymbol]: X }
+export type EndingWith<X> = symbol & { readonly [EndingWithSymbol]: X }
 
-export type StringEndingWith<S extends string> = string & { [k in EndingWith<S>]: true }
+export type StringEndingWith<S extends string> = string & { readonly [k in EndingWith<S>]: true }
 
 export class StringEndingWithGuard<S extends string> {
 
@@ -101,9 +101,9 @@ export class StringEndingWithGuard<S extends string> {
 
 declare const MatchingSymbol: unique symbol
 
-export type Matching<X> = symbol & { [MatchingSymbol]: X }
+export type Matching<X> = symbol & { readonly [MatchingSymbol]: X }
 
-export type StringMatching<S extends RegExp> = string & { [k in Matching<S>]: true }
+export type StringMatching<S extends RegExp> = string & { readonly [k in Matching<S>]: true }
 
 export class StringMatchingGuard<X extends RegExp> {
 
