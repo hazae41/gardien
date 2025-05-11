@@ -92,19 +92,19 @@ export function $string(message?: string) {
 
 export namespace $string {
 
-  export function $includes<S extends string>(value: S, message?: string) {
+  export function includes<S extends string>(value: S, message?: string) {
     return $error(new StringIncludingGuard<S>(value), message)
   }
 
-  export function $startsWith<S extends string>(value: S, message?: string) {
+  export function startsWith<S extends string>(value: S, message?: string) {
     return $error(new StringStartingWithGuard<S>(value), message)
   }
 
-  export function $endsWith<S extends string>(value: S, message?: string) {
+  export function endsWith<S extends string>(value: S, message?: string) {
     return $error(new StringEndingWithGuard<S>(value), message)
   }
 
-  export function $matches<X extends RegExp>(value: X, message?: string) {
+  export function matches<X extends RegExp>(value: X, message?: string) {
     return $error(new StringMatchingGuard<X>(value), message)
   }
 
@@ -124,31 +124,31 @@ export function $numberable(message?: string) {
 
 export namespace $number {
 
-  export function $positive(message?: string) {
+  export function positive(message?: string) {
     return $error(PositiveNumberGuard, message)
   }
 
-  export function $negative(message?: string) {
+  export function negative(message?: string) {
     return $error(NegativeNumberGuard, message)
   }
 
-  export function $nonPositive(message?: string) {
+  export function nonPositive(message?: string) {
     return $error(NonPositiveNumberGuard, message)
   }
 
-  export function $nonNegative(message?: string) {
+  export function nonNegative(message?: string) {
     return $error(NonNegativeNumberGuard, message)
   }
 
-  export function $min<N extends number>(value: N, message?: string) {
+  export function min<N extends number>(value: N, message?: string) {
     return $error(new MinNumberGuard<N>(value), message)
   }
 
-  export function $max<N extends number>(value: N, message?: string) {
+  export function max<N extends number>(value: N, message?: string) {
     return $error(new MaxNumberGuard<N>(value), message)
   }
 
-  export function $minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
+  export function minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
     return $inter([new MinNumberGuard<A>(min), new MaxNumberGuard<B>(max)] as const, message)
   }
 
@@ -200,15 +200,15 @@ export function $length<N extends number>(length: N, message?: string) {
 
 export namespace $length {
 
-  export function $min<N extends number>(length: N, message?: string) {
+  export function min<N extends number>(length: N, message?: string) {
     return $error(new MinLengthGuard<N>(length), message)
   }
 
-  export function $max<N extends number>(length: N, message?: string) {
+  export function max<N extends number>(length: N, message?: string) {
     return $error(new MaxLengthGuard<N>(length), message)
   }
 
-  export function $minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
+  export function minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
     return $inter([new MinLengthGuard<A>(min), new MaxLengthGuard<B>(max)] as const, message)
   }
 

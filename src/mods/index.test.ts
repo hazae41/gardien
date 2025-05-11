@@ -1,10 +1,10 @@
 import { assert, test } from "@hazae41/phobos";
 import { asOrThrow, Guard, is } from "./guard/index.js";
-import * as z from "./guards/index.js";
+import { $inter, $length, $number, $numberable, $omitable, $record, $string, $strong, $union, $unknown } from "./guards/index.js";
 
 await test("record string min", async () => {
-  const result = is(z.$record({
-    aaa: z.$string().min(6)
+  const result = is($record({
+    aaa: $inter([$string(), $length.min(6)])
   } as const), {
     aaa: "aaa"
   } as const)
@@ -13,11 +13,11 @@ await test("record string min", async () => {
 })
 
 await test("unknown rpc", async () => {
-  const RpcRequestGuard = z.$record({
-    jsonrpc: z.$strong("2.0"),
-    id: z.$union([z.$strong(null), z.$number(), z.$string()]),
-    method: z.$string(),
-    params: z.$omitable(z.$unknown())
+  const RpcRequestGuard = $record({
+    jsonrpc: $strong("2.0"),
+    id: $union([$strong(null), $number(), $string()]),
+    method: $string(),
+    params: $omitable($unknown())
   } as const)
 
   const raw = JSON.stringify({
@@ -38,21 +38,21 @@ await test("known rpc", async () => {
     params: { example: "example" }
   } as const)
 
-  const RpcRequestGuard = <M extends Guard<string, string>, P extends Guard>(method: M, params: P) => z.$record({
-    jsonrpc: z.$strong("2.0"),
-    id: z.$union([z.$strong(null), z.$number(), z.$string()]),
+  const RpcRequestGuard = <M extends Guard<string, string>, P extends Guard>(method: M, params: P) => $record({
+    jsonrpc: $strong("2.0"),
+    id: $union([$strong(null), $number(), $string()]),
     method: method,
     params: params
   } as const)
 
-  const ExampleParamsGuard = z.$record({
-    example: z.$string()
+  const ExampleParamsGuard = $record({
+    example: $string()
   } as const)
 
-  asOrThrow(RpcRequestGuard(z.$strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
+  asOrThrow(RpcRequestGuard($strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
 })
 
 await test("numberable", async () => {
-  assert(is(z.$numberable().nonNegative(), "123") === true)
-  assert(is(z.$numberable().nonNegative(), "0x123") === true)
+  assert(is($inter([$numberable(), $number.nonNegative()]), "123") === true)
+  assert(is($inter([$numberable(), $number.nonNegative()]), "0x123") === true)
 })
