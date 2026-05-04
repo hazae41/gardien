@@ -3,11 +3,11 @@ export class NumberableGuard {
 
   constructor() { }
 
-  static asOrThrow(value?: any): number {
+  static asOrThrow(value: unknown): number {
     return Number(value)
   }
 
-  asOrThrow(value?: any): number {
+  asOrThrow(value: unknown): number {
     return Number(value)
   }
 
@@ -17,19 +17,11 @@ export class NumberGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): number
-
-  static asOrThrow(value: number): number
-
   static asOrThrow(value: unknown): number {
     if (typeof value !== "number")
       throw new Error()
     return value
   }
-
-  asOrThrow(value: unknown): number
-
-  asOrThrow(value: number): number
 
   asOrThrow(value: unknown): number {
     if (typeof value !== "number")
@@ -39,111 +31,83 @@ export class NumberGuard {
 
 }
 
-export type PositiveNumberSymbol = symbol & { readonly name: "PositiveNumberSymbol" }
-
-export type PositiveNumber = number & { readonly [k: PositiveNumberSymbol]: true }
-
 export class PositiveNumberGuard {
 
-  static asOrThrow(value: number): PositiveNumber {
+  static asOrThrow(value: number): number {
     if (value <= 0)
       throw new Error()
-    return value as PositiveNumber
+    return value
   }
 
-  asOrThrow(value: number): PositiveNumber {
+  asOrThrow(value: number): number {
     if (value <= 0)
       throw new Error()
-    return value as PositiveNumber
+    return value
   }
 
 }
-
-export type NegativeNumberSymbol = symbol & { readonly name: "NegativeNumberSymbol" }
-
-export type NegativeNumber = number & { readonly [k: NegativeNumberSymbol]: true }
 
 export class NegativeNumberGuard {
 
-  static asOrThrow(value: number): NegativeNumber {
+  static asOrThrow(value: number): number {
     if (value >= 0)
       throw new Error()
-    return value as NegativeNumber
+    return value
   }
 
-  asOrThrow(value: number): NegativeNumber {
+  asOrThrow(value: number): number {
     if (value >= 0)
       throw new Error()
-    return value as NegativeNumber
+    return value
   }
 
 }
-
-export type NonPositiveNumberSymbol = symbol & { readonly name: "NonPositiveNumberSymbol" }
-
-export type NonPositiveNumber = number & { readonly [k: NonPositiveNumberSymbol]: true }
 
 export class NonPositiveNumberGuard {
 
-  static asOrThrow(value: number): NonPositiveNumber {
+  static asOrThrow(value: number): number {
     if (value > 0)
       throw new Error()
-    return value as NonPositiveNumber
+    return value
   }
 
-  asOrThrow(value: number): NonPositiveNumber {
+  asOrThrow(value: number): number {
     if (value > 0)
       throw new Error()
-    return value as NonPositiveNumber
+    return value
   }
 
 }
-
-export type NonNegativeNumberSymbol = symbol & { readonly name: "NonNegativeNumberSymbol" }
-
-export type NonNegativeNumber = number & { readonly [k: NonNegativeNumberSymbol]: true }
 
 export class NonNegativeNumberGuard {
 
-  static asOrThrow(value: number): NonNegativeNumber {
+  static asOrThrow(value: number): number {
     if (value < 0)
       throw new Error()
-    return value as NonNegativeNumber
+    return value
   }
 
-  asOrThrow(value: number): NonNegativeNumber {
+  asOrThrow(value: number): number {
     if (value < 0)
       throw new Error()
-    return value as NonNegativeNumber
+    return value
   }
 
 }
 
-export type MinSymbol = symbol & { readonly name: "MinSymbol" }
-
-export type MinSymbol2<X> = symbol & { readonly [k: MinSymbol]: X }
-
-export type MinNumber<N extends number> = number & { readonly [k: MinSymbol2<N>]: true }
-
-export class MinNumberGuard<N extends number> {
+export class MinNumberGuard {
 
   constructor(
-    readonly value: N
+    readonly value: number
   ) { }
 
-  asOrThrow(value: number): MinNumber<N> {
+  asOrThrow(value: number): number {
     if (value < this.value)
       throw new Error()
-    return value as MinNumber<N>
+    return value
   }
 
 }
-
-export type MaxSymbol = symbol & { readonly name: "MaxSymbol" }
-
-export type MaxSymbol2<X> = symbol & { readonly [k: MaxSymbol]: X }
-
-export type MaxNumber<N extends number> = number & { readonly [k: MaxSymbol2<N>]: true }
 
 export class MaxNumberGuard<N extends number> {
 
@@ -151,10 +115,10 @@ export class MaxNumberGuard<N extends number> {
     readonly value: N
   ) { }
 
-  asOrThrow(value: number): MaxNumber<N> {
+  asOrThrow(value: number): number {
     if (value > this.value)
       throw new Error()
-    return value as MaxNumber<N>
+    return value
   }
 
 }

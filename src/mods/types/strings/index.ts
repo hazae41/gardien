@@ -1,13 +1,12 @@
-
 export class StringableGuard {
 
   constructor() { }
 
-  static asOrThrow(value?: any): string {
+  static asOrThrow(value: unknown): string {
     return String(value)
   }
 
-  asOrThrow(value?: any): string {
+  asOrThrow(value: unknown): string {
     return String(value)
   }
 
@@ -17,19 +16,11 @@ export class StringGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): string
-
-  static asOrThrow(value: string): string
-
   static asOrThrow(value: unknown): string {
     if (typeof value !== "string")
       throw new Error()
     return value
   }
-
-  asOrThrow(value: unknown): string
-
-  asOrThrow(value: string): string
 
   asOrThrow(value: unknown): string {
     if (typeof value !== "string")
@@ -39,82 +30,58 @@ export class StringGuard {
 
 }
 
-export type IncludingSymbol = symbol & { readonly name: "IncludingSymbol" }
-
-export type IncludingSymbol2<X> = symbol & { readonly [k: IncludingSymbol]: X }
-
-export type StringIncluding<S extends string> = string & { readonly [k: IncludingSymbol2<S>]: true }
-
-export class StringIncludingGuard<S extends string> {
+export class StringIncludingGuard {
 
   constructor(
-    readonly value: S
+    readonly value: string
   ) { }
 
-  asOrThrow(value: string): StringIncluding<S> {
+  asOrThrow(value: string): string {
     if (!value.includes(this.value))
       throw new Error()
-    return value as StringIncluding<S>
+    return value
   }
 
 }
 
-export type StartingWithSymbol = symbol & { readonly name: "StartingWithSymbol" }
-
-export type StartingWithSymbol2<X> = symbol & { readonly [k: StartingWithSymbol]: X }
-
-export type StringStartingWith<S extends string> = string & { readonly [k: StartingWithSymbol2<S>]: true }
-
-export class StringStartingWithGuard<S extends string> {
+export class StringStartingWithGuard {
 
   constructor(
-    readonly value: S
+    readonly value: string
   ) { }
 
-  asOrThrow(value: string): StringStartingWith<S> {
+  asOrThrow(value: string): string {
     if (!value.startsWith(this.value))
       throw new Error()
-    return value as StringStartingWith<S>
+    return value
   }
 
 }
 
-export type EndingWithSymbol = symbol & { readonly name: "EndingWithSymbol" }
-
-export type EndingWithSymbol2<X> = symbol & { readonly [k: EndingWithSymbol]: X }
-
-export type StringEndingWith<S extends string> = string & { readonly [k: EndingWithSymbol2<S>]: true }
-
-export class StringEndingWithGuard<S extends string> {
+export class StringEndingWithGuard {
 
   constructor(
-    readonly value: S
+    readonly value: string
   ) { }
 
-  asOrThrow(value: string): StringEndingWith<S> {
+  asOrThrow(value: string): string {
     if (!value.endsWith(this.value))
       throw new Error()
-    return value as StringEndingWith<S>
+    return value
   }
 
 }
 
-export type MatchingSymbol = symbol & { readonly name: "MatchingSymbol" }
-
-export type MatchingSymbol2<X> = symbol & { readonly [k: MatchingSymbol]: X }
-
-export type StringMatching<S extends RegExp> = string & { readonly [k: MatchingSymbol2<S>]: true }
-
-export class StringMatchingGuard<X extends RegExp> {
+export class StringMatchingGuard {
 
   constructor(
-    readonly value: X
+    readonly value: RegExp
   ) { }
 
-  asOrThrow(value: string): StringMatching<X> {
+  asOrThrow(value: string): string {
     if (this.value.test(value) === null)
       throw new Error()
-    return value as StringMatching<X>
+    return value
   }
 
 }

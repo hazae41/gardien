@@ -1,10 +1,10 @@
+import { $object, $pass } from "@/mods/guards/index.ts";
+import { $either, $length, $number, $numberable, $record, $string, $strong, asOrThrow, Guard, is } from "@/mods/index.ts";
 import { assert, test } from "@hazae41/phobos";
-import { asOrThrow, Guard, is } from "./guard/index.js";
-import { $inter, $length, $number, $numberable, $omitable, $record, $string, $strong, $union, $unknown } from "./guards/index.js";
 
-await test("record string min", async () => {
+test("record string min", async () => {
   const result = is($record({
-    aaa: $inter([$string(), $length.min(6)])
+    aaa: $string().then($length.min(4))
   } as const), {
     aaa: "aaa"
   } as const)
@@ -12,13 +12,13 @@ await test("record string min", async () => {
   assert(result === false)
 })
 
-await test("unknown rpc", async () => {
-  const RpcRequestGuard = $record({
+test("unknown rpc", async () => {
+  const RpcRequestGuard = $object().then($record({
     jsonrpc: $strong("2.0"),
-    id: $union([$strong(null), $number(), $string()]),
+    id: $either([$strong(null), $number(), $string()]),
     method: $string(),
-    params: $omitable($unknown())
-  } as const)
+    params: $pass()
+  } as const))
 
   const raw = JSON.stringify({
     jsonrpc: "2.0",
@@ -30,7 +30,7 @@ await test("unknown rpc", async () => {
   asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
 })
 
-await test("known rpc", async () => {
+test("known rpc", async () => {
   const raw = JSON.stringify({
     jsonrpc: "2.0",
     id: 1,
@@ -38,21 +38,21 @@ await test("known rpc", async () => {
     params: { example: "example" }
   } as const)
 
-  const RpcRequestGuard = <M extends Guard<string, string>, P extends Guard>(method: M, params: P) => $record({
+  const RpcRequestGuard = <M extends Guard<string, string>, P extends Guard>(method: M, params: P) => $object().then($record({
     jsonrpc: $strong("2.0"),
-    id: $union([$strong(null), $number(), $string()]),
+    id: $either([$strong(null), $number(), $string()]),
     method: method,
     params: params
-  } as const)
+  } as const))
 
-  const ExampleParamsGuard = $record({
+  const ExampleParamsGuard = $object().then($record({
     example: $string()
-  } as const)
+  } as const))
 
   asOrThrow(RpcRequestGuard($strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
 })
 
-await test("numberable", async () => {
-  assert(is($inter([$numberable(), $number.nonNegative()]), "123") === true)
-  assert(is($inter([$numberable(), $number.nonNegative()]), "0x123") === true)
+test("numberable", async () => {
+  assert(is($numberable().then($number.nonNegative()), "123") === true)
+  assert(is($numberable().then($number.nonNegative()), "0x123") === true)
 })

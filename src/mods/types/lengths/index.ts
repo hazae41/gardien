@@ -1,47 +1,42 @@
-import { MaxNumber, MinNumber } from "../numbers/index.js"
 
-export class LengthGuard<N extends number> {
+export class LengthGuard {
 
   constructor(
-    readonly length: N
+    readonly length: number
   ) { }
 
-  asOrThrow(value: { length: number }): { length: N }
-
-  asOrThrow(value: { length: N }): { length: N }
-
-  asOrThrow(value: { length: number }): { length: N } {
+  asOrThrow(value: { length: number }): { length: number } {
     if (value.length !== this.length)
       throw new Error()
-    return value as { length: N }
+    return value
   }
 
 }
 
-export class MinLengthGuard<N extends number> {
+export class MinLengthGuard {
 
   constructor(
-    readonly length: N
+    readonly length: number
   ) { }
 
-  asOrThrow(value: { length: number }): { length: MinNumber<N> } {
+  asOrThrow(value: { length: number }): { length: number } {
     if (value.length < this.length)
       throw new Error()
-    return value as { length: MinNumber<N> }
+    return value
   }
 
 }
 
-export class MaxLengthGuard<N extends number> {
+export class MaxLengthGuard {
 
   constructor(
-    readonly length: N
+    readonly length: number
   ) { }
 
-  asOrThrow(value: { length: number }): { length: MaxNumber<N> } {
+  asOrThrow(value: { length: number }): { length: number } {
     if (value.length > this.length)
       throw new Error()
-    return value as { length: MaxNumber<N> }
+    return value
   }
 
 }

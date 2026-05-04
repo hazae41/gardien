@@ -1,0 +1,2 @@
+export type Inter<T extends readonly any[]> = T extends readonly [infer X, ...infer R] ? X & Inter<R> : unknown
+export type Union<T extends readonly any[]> = T extends readonly [infer X, ...infer R] ? X | Union<R> : unknown

@@ -1,35 +1,15 @@
-export class PassGuard<T> {
-
-  asOrThrow(value: T): T
-
-  asOrThrow(value: T): T
-
-  asOrThrow(value: T): T {
-    return value
-  }
-
-}
-
-export class FailGuard<T> {
-
-  asOrThrow(value: T): never
-
-  asOrThrow(value: T): never
-
-  asOrThrow(value: T): never {
-    throw new Error()
-  }
-
-}
-
-export class AsGuard<T> {
-
-  asOrThrow(value: unknown): T
-
-  asOrThrow(value: T): T
+export class PassGuard<T = unknown> {
 
   asOrThrow(value: unknown): T {
     return value as T
+  }
+
+}
+
+export class FailGuard {
+
+  static asOrThrow(_: unknown): never {
+    throw new Error()
   }
 
 }

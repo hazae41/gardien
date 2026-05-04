@@ -1,46 +1,35 @@
-import { Inter } from "libs/inter/index.js";
-import { Union } from "libs/union/index.js";
-import { Guard } from "mods/guard/index.js";
+import { Inter, Union } from "@/libs/logical/mod.ts";
+import { Guard } from "@/mods/guard/index.ts";
 
-export class InterGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]> {
+export class ThenGuard<A extends Guard<any, any>, B extends Guard<any, any>> {
 
   constructor(
-    readonly guards: T
+    readonly a: A,
+    readonly b: B,
   ) { }
 
-  asOrThrow(value: Union<Guard.Overloaded.AllWeak<T>>): Inter<Guard.Overloaded.AllOutput<T>>
-
-  asOrThrow(value: Inter<Guard.Overloaded.AllStrong<T>>): Inter<Guard.Overloaded.AllOutput<T>>
-
-  asOrThrow(value: unknown): Inter<Guard.Overloaded.AllOutput<T>> {
-    for (const guard of this.guards)
-      value = guard.asOrThrow(value)
-    return value as any
+  asOrThrow(value: Guard.Input<A>): Guard.Output<B> {
+    return this.b.asOrThrow(this.a.asOrThrow(value))
   }
 
 }
 
-export class UnionGuard<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]> {
+export class EitherGuard<T extends readonly Guard<any, any>[]> {
 
   constructor(
     readonly guards: T,
   ) { }
 
-  asOrThrow(value: Union<Guard.Overloaded.AllWeak<T>>): Union<Guard.Overloaded.AllOutput<T>>
-
-  asOrThrow(value: Union<Guard.Overloaded.AllStrong<T>>): Union<Guard.Overloaded.AllOutput<T>>
-
-  asOrThrow(value: unknown): Union<Guard.Overloaded.AllOutput<T>> {
-    let cause = []
-
-    for (const guard of this.guards)
+  asOrThrow(value: Inter<Guard.AllInput<T>>): Union<Guard.AllOutput<T>> {
+    for (const guard of this.guards) {
       try {
         return guard.asOrThrow(value)
-      } catch (e: unknown) {
-        cause.push(e)
+      } catch {
+        continue
       }
+    }
 
-    throw new Error(undefined, { cause })
+    throw new Error()
   }
 
 }

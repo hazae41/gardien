@@ -1,0 +1,15 @@
+{
+  "imports": {
+    "@/": "./src/"
+  },
+  "lint": {
+    "rules": {
+      "exclude": [
+        "ban-types",
+        "no-explicit-any",
+        "no-namespace",
+        "require-await"
+      ]
+    }
+  }
+}

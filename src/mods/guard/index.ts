@@ -1,8 +1,6 @@
-import { Restruct } from "libs/restruct/index.js"
-import { IsSame } from "libs/same/index.js"
-import { Reinf, Resup } from "libs/supinf/index.js"
+import { Nullable } from "@/libs/nullable/mod.ts";
 
-export interface Guard<I = any, O = any> {
+export interface Guard<I = any, O extends I = any> {
   asOrThrow(value: I): O
 }
 
@@ -12,50 +10,17 @@ export namespace Guard {
 
   export type Output<T> = T extends Guard<any, infer O> ? O : never
 
-  export interface Overloaded<W = any, S extends W = any, O = any> {
-    asOrThrow(value: W): O
-    asOrThrow(value: S): O
-  }
+  export type AllInput<T> = { [K in keyof T]: Input<T[K]> }
 
-  export namespace Overloaded {
-
-    export type Weak<T> = T extends Overloaded<infer W, any, any> ? W : never
-
-    export type Strong<T> = T extends Overloaded<any, infer S, any> ? S : never
-
-    export type Output<T> = T extends Overloaded<any, any, infer O> ? O : never
-
-    export type WeakOrSelf<T> = T extends Overloaded<infer W, any, any> ? W : T
-
-    export type StrongOrSelf<T> = T extends Overloaded<any, infer S, any> ? S : T
-
-    export type OutputOrSelf<T> = T extends Overloaded<any, any, infer O> ? O : T
-
-    export type AllStrong<T> = { [K in keyof T]: Strong<T[K]> }
-
-    export type AllWeak<T> = { [K in keyof T]: Weak<T[K]> }
-
-    export type AllOutput<T> = { [K in keyof T]: Output<T[K]> }
-
-    export type AllWeakOrSelf<T> = { [K in keyof T]: WeakOrSelf<T[K]> }
-
-    export type AllStrongOrSelf<T> = { [K in keyof T]: StrongOrSelf<T[K]> }
-
-    export type AllOutputOrSelf<T> = { [K in keyof T]: OutputOrSelf<T[K]> }
-
-    export type Guardable<X extends Guard.Overloaded.Weak<T>, T extends Guard.Overloaded<any, any, any>> = Resup<X, Restruct<X, Guard.Overloaded.Strong<T>>> | Guard.Overloaded.Strong<T>
-
-    export type Guarded<X extends Guard.Overloaded.Weak<T>, T extends Guard.Overloaded<any, any, any>> = IsSame<Guard.Overloaded.Strong<T>, Guard.Overloaded.Output<T>> extends true ? Reinf<X, Restruct<X, Guard.Overloaded.Output<T>>> : Guard.Overloaded.Output<T>
-
-  }
+  export type AllOutput<T> = { [K in keyof T]: Output<T[K]> }
 
 }
 
-export function asOrThrow<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> {
+export function asOrThrow<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): Guard.Output<T> {
   return guard.asOrThrow(value)
 }
 
-export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): Guard.Overloaded.Guarded<X, T> | null {
+export function asOrNull<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): Nullable<Guard.Output<T>> {
   try {
     return guard.asOrThrow(value)
   } catch {
@@ -63,10 +28,9 @@ export function asOrNull<T extends Guard.Overloaded<any, any, any>, X extends Gu
   }
 }
 
-export function is<T extends Guard.Overloaded<any, any, any>, X extends Guard.Overloaded.Weak<T>>(guard: T, value: Guard.Overloaded.Guardable<X, T>): value is Guard.Overloaded.Guarded<X, T> {
+export function is<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): value is Guard.Output<T> {
   try {
     guard.asOrThrow(value)
-
     return true
   } catch {
     return false

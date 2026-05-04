@@ -1,84 +1,35 @@
-import { Exact } from "libs/exact/index.js"
-import { Errorer } from "mods/errorer/index.js"
-import { Guard } from "mods/guard/index.js"
-import { Property } from "mods/props/index.js"
-import { ArrayAndElementsGuard, ArrayAndTupleGuard, AsGuard, BigIntableGuard, BigIntGuard, BooleanGuard, FailGuard, FunctionGuard, InterGuard, LengthGuard, MaxLengthGuard, MinLengthGuard, ObjectGuard, PassGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, UnionGuard, WeakEqualityGuard } from "mods/types/index.js"
-import { MaxNumberGuard, MinNumberGuard, NegativeNumberGuard, NonNegativeNumberGuard, NonPositiveNumberGuard, NumberableGuard, NumberGuard, PositiveNumberGuard } from "mods/types/numbers/index.js"
-import { StringableGuard, StringEndingWithGuard, StringGuard, StringIncludingGuard, StringMatchingGuard, StringStartingWithGuard } from "mods/types/strings/index.js"
+import { Guard } from "@/mods/guard/index.ts"
+import { ArrayGuard, BigIntableGuard, BigIntGuard, BooleanGuard, EitherGuard, ElementsGuard, FailGuard, FunctionGuard, LengthGuard, MaxLengthGuard, MinLengthGuard, ObjectGuard, PassGuard, RecordGuard, StrongEqualityGuard, SymbolGuard, TupleGuard, WeakEqualityGuard } from "@/mods/types/index.ts"
+import { ThenGuard } from "@/mods/types/logicals/index.ts"
+import { MaxNumberGuard, MinNumberGuard, NegativeNumberGuard, NonNegativeNumberGuard, NonPositiveNumberGuard, NumberableGuard, NumberGuard, PositiveNumberGuard } from "@/mods/types/numbers/index.ts"
+import { StringableGuard, StringEndingWithGuard, StringGuard, StringIncludingGuard, StringMatchingGuard, StringStartingWithGuard } from "@/mods/types/strings/index.ts"
+import { Errorer } from "@/mods/wrappers/mod.ts"
 
 export function $error<T extends Guard<any, any>>(guard: T, message?: string) {
   return new Errorer(guard, (cause) => new Error(message, { cause }))
 }
 
-/**
- * Mark a property as readonly
- * @example { test: readonly(string()) }: { readonly test: string }
- * @example PASS: { test: "hello" }
- * @example FAIL: { test: 1 }
- * @param value 
- * @returns 
- */
-export function $readonly<T>(value: T) {
-  return new Property.Readonly(value)
+export function $nullable<T extends Guard<any, any>>(value: T) {
+  return $either([value, $weak(null)])
 }
 
-/**
- * Mark a property as optional and allow undefined values
- * @example { test: optional(string()) }: { test?: string() }
- * @example PASS: { test: "hello" }
- * @example PASS: { test: undefined }
- * @example PASS: {}
- * @example FAIL: { test: 1 }
- * @param value 
- * @returns 
- */
-export function $optional<T>(value: T) {
-  return new Property.Optional(value)
+export function $omitable<T extends Guard<any, any>>(value: T) {
+  return $either([value, $strong(undefined)])
 }
 
-/**
- * Like optional but the output type is an union with undefined instead of an optional
- * @example { test: omitable(string()) }: { test: string() | undefined }
- * @example PASS: { test: "hello" }
- * @example PASS: { test: undefined }
- * @example PASS: {}
- * @example FAIL: { test: 1 }
- * @param value 
- * @returns 
- */
-export function $omitable<T>(value: T) {
-  return new Property.Omitable(value)
+export function $fail(message?: string) {
+  return $error(FailGuard, message)
 }
 
-export function $any() {
-  return new PassGuard<any>()
-}
-
-export function $unknown() {
-  return new PassGuard<unknown>()
-}
-
-export function $as<T>() {
-  return new AsGuard<T>()
-}
-
-export function $pass<T>() {
+export function $pass<T = unknown>() {
   return new PassGuard<T>()
 }
 
-export function $fail<T>(message?: string) {
-  return $error(new FailGuard<T>(), message)
-}
-
-export function $never(message?: string) {
-  return $error(new FailGuard<never>(), message)
-}
-
-export function $strong<T>(value: Exact<T>, message?: string) {
+export function $strong<T = unknown>(value: T, message?: string) {
   return $error(new StrongEqualityGuard(value), message)
 }
 
-export function $weak<T>(value: Exact<T>, message?: string) {
+export function $weak<T = unknown>(value: T, message?: string) {
   return $error(new WeakEqualityGuard(value), message)
 }
 
@@ -92,20 +43,20 @@ export function $string(message?: string) {
 
 export namespace $string {
 
-  export function includes<S extends string>(value: S, message?: string) {
-    return $error(new StringIncludingGuard<S>(value), message)
+  export function includes(value: string, message?: string) {
+    return $error(new StringIncludingGuard(value), message)
   }
 
-  export function startsWith<S extends string>(value: S, message?: string) {
-    return $error(new StringStartingWithGuard<S>(value), message)
+  export function startsWith(value: string, message?: string) {
+    return $error(new StringStartingWithGuard(value), message)
   }
 
-  export function endsWith<S extends string>(value: S, message?: string) {
-    return $error(new StringEndingWithGuard<S>(value), message)
+  export function endsWith(value: string, message?: string) {
+    return $error(new StringEndingWithGuard(value), message)
   }
 
-  export function matches<X extends RegExp>(value: X, message?: string) {
-    return $error(new StringMatchingGuard<X>(value), message)
+  export function matches(value: RegExp, message?: string) {
+    return $error(new StringMatchingGuard(value), message)
   }
 
 }
@@ -140,16 +91,16 @@ export namespace $number {
     return $error(NonNegativeNumberGuard, message)
   }
 
-  export function min<N extends number>(value: N, message?: string) {
-    return $error(new MinNumberGuard<N>(value), message)
+  export function min(value: number, message?: string) {
+    return $error(new MinNumberGuard(value), message)
   }
 
-  export function max<N extends number>(value: N, message?: string) {
-    return $error(new MaxNumberGuard<N>(value), message)
+  export function max(value: number, message?: string) {
+    return $error(new MaxNumberGuard(value), message)
   }
 
-  export function minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
-    return $inter([new MinNumberGuard<A>(min), new MaxNumberGuard<B>(max)] as const, message)
+  export function minmax(min: number, max: number, message?: string) {
+    return $error(new ThenGuard(new MinNumberGuard(min), new MaxNumberGuard(max)), message)
   }
 
 }
@@ -175,41 +126,37 @@ export function $symbol(message?: string) {
 }
 
 export function $array<T extends Guard<any, any>>(value: T, message?: string) {
-  return $error(new ArrayAndElementsGuard(value), message)
+  return $error(new ThenGuard(ArrayGuard, new ElementsGuard(value)), message)
 }
 
 export function $tuple<T extends [Guard<any, any>, ...Guard<any, any>[]]>(value: T, message?: string) {
-  return $error(new ArrayAndTupleGuard(value), message)
+  return $error(new ThenGuard(ArrayGuard, new TupleGuard(value)), message)
 }
 
-export function $record<T extends { [k: PropertyKey]: Property<Guard<any, any>> }>(value: T, message?: string) {
+export function $record<T extends { [k: PropertyKey]: Guard<any, any> }>(value: T, message?: string) {
   return $error(new RecordGuard(value), message)
 }
 
-export function $inter<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]>(guards: T, message?: string) {
-  return $error(new InterGuard(guards), message)
+export function $either<T extends readonly Guard<any, any>[]>(guards: T, message?: string) {
+  return $error(new EitherGuard(guards), message)
 }
 
-export function $union<T extends readonly [Guard.Overloaded<any, any, any>, ...Guard.Overloaded<any, any, any>[], Guard.Overloaded<any, any, any>]>(guards: T, message?: string) {
-  return $error(new UnionGuard(guards), message)
-}
-
-export function $length<N extends number>(length: N, message?: string) {
-  return $error(new LengthGuard<N>(length), message)
+export function $length(length: number, message?: string) {
+  return $error(new LengthGuard(length), message)
 }
 
 export namespace $length {
 
-  export function min<N extends number>(length: N, message?: string) {
-    return $error(new MinLengthGuard<N>(length), message)
+  export function min(length: number, message?: string) {
+    return $error(new MinLengthGuard(length), message)
   }
 
-  export function max<N extends number>(length: N, message?: string) {
-    return $error(new MaxLengthGuard<N>(length), message)
+  export function max(length: number, message?: string) {
+    return $error(new MaxLengthGuard(length), message)
   }
 
-  export function minmax<A extends number, B extends number>(min: A, max: B, message?: string) {
-    return $inter([new MinLengthGuard<A>(min), new MaxLengthGuard<B>(max)] as const, message)
+  export function minmax(min: number, max: number, message?: string) {
+    return $error(new ThenGuard(new MinLengthGuard(min), new MaxLengthGuard(max)), message)
   }
 
 }
