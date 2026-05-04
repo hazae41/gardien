@@ -14,7 +14,7 @@ npm i @hazae41/gardien
 - 100% TypeScript and ESM
 - No external dependencies
 - Rust-like patterns
-- Fully type-safe
+- Under-engineered
 - Unit-tested
 - Zod-like syntax
 
