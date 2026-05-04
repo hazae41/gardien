@@ -15,7 +15,7 @@ npm i @hazae41/gardien
 - Rust-like patterns
 - Under-engineered
 - Unit-tested
-- Zod-like syntax
+- Extensible
 
 ## Usage
 
