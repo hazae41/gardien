@@ -11,7 +11,7 @@ npm i @hazae41/gardien
 ## Features
 
 ### Current features
-- Minimal dependencies
+- No external dependencies
 - Rust-like patterns
 - Under-engineered
 - Unit-tested
