@@ -1,4 +1,4 @@
-import { Guard } from "@/mods/guard/index.ts";
+import { Guard } from "@/mods/guard/mod.ts";
 
 export class RecordGuard<T extends { [k: PropertyKey]: Guard<any, any> }> {
 

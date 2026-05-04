@@ -1,4 +1,4 @@
-import { Guard } from "@/mods/guard/index.ts";
+import { Guard } from "@/mods/guard/mod.ts";
 import { ThenGuard } from "@/mods/types/logicals/index.ts";
 
 export class Wrapper<T extends Guard<any, any>> {

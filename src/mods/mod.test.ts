@@ -1,5 +1,4 @@
-import { $object, $pass } from "@/mods/guards/index.ts";
-import { $either, $length, $number, $numberable, $record, $string, $strong, asOrThrow, Guard, is } from "@/mods/index.ts";
+import { $either, $length, $number, $numberable, $object, $pass, $record, $string, $strong, asOrThrow, Guard, is } from "@/mods/mod.ts";
 import { assert, test } from "@hazae41/phobos";
 
 test("record string min", async () => {

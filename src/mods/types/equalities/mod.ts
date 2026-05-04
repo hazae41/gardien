@@ -1,5 +1,4 @@
-
-export class StrongEqualityGuard<T> {
+export class StrongGuard<T> {
 
   constructor(
     readonly value: T
@@ -13,7 +12,7 @@ export class StrongEqualityGuard<T> {
 
 }
 
-export class WeakEqualityGuard<T> {
+export class WeakGuard<T> {
 
   constructor(
     readonly value: T

@@ -1,5 +1,5 @@
 import { Inter, Union } from "@/libs/logical/mod.ts";
-import { Guard } from "@/mods/guard/index.ts";
+import { Guard } from "@/mods/guard/mod.ts";
 
 export class ThenGuard<A extends Guard<any, any>, B extends Guard<any, any>> {
 
