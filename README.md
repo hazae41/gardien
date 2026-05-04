@@ -11,8 +11,7 @@ npm i @hazae41/gardien
 ## Features
 
 ### Current features
-- 100% TypeScript and ESM
-- No external dependencies
+- Minimal dependencies
 - Rust-like patterns
 - Under-engineered
 - Unit-tested
