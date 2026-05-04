@@ -37,7 +37,7 @@ test("known rpc", async () => {
     params: { example: "example" }
   } as const)
 
-  const RpcRequestGuard = <M extends Guard<string, string>, P extends Guard>(method: M, params: P) => $object().then($record({
+  const RpcRequestGuard = <M extends Guard<unknown, string>, P extends Guard<unknown, unknown>>(method: M, params: P) => $object().then($record({
     jsonrpc: $strong("2.0"),
     id: $either([$strong(null), $number(), $string()]),
     method: method,
