@@ -85,3 +85,39 @@ export class StringMatchingGuard {
   }
 
 }
+
+export class HexStringGuard {
+
+  constructor() { }
+
+  static asOrThrow(value: string): string {
+    if (!/^[0-9a-fA-F]+$/.test(value))
+      throw new Error()
+    return value
+  }
+
+  asOrThrow(value: string): string {
+    if (!/^[0-9a-fA-F]+$/.test(value))
+      throw new Error()
+    return value
+  }
+
+}
+
+export class ZeroHexStringGuard {
+
+  constructor() { }
+
+  static asOrThrow(value: string): `0x${string}` {
+    if (!/^0x[0-9a-fA-F]+$/.test(value))
+      throw new Error()
+    return value as `0x${string}`
+  }
+
+  asOrThrow(value: string): `0x${string}` {
+    if (!/^0x[0-9a-fA-F]+$/.test(value))
+      throw new Error()
+    return value as `0x${string}`
+  }
+
+}

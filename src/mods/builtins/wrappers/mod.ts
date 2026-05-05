@@ -1,5 +1,5 @@
+import { ThenGuard } from "@/mods/builtins/logicals/mod.ts";
 import { Guard } from "@/mods/guard/mod.ts";
-import { ThenGuard } from "@/mods/types/logicals/index.ts";
 
 export class Wrapper<T extends Guard<any, any>> {
 

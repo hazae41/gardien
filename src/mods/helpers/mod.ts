@@ -1,14 +1,14 @@
+import { FailGuard, PassGuard } from "@/mods/builtins/abstracts/mod.ts"
+import { ArrayGuard, ElementsGuard, TupleGuard } from "@/mods/builtins/arrays/mod.ts"
+import { StrongGuard, WeakGuard } from "@/mods/builtins/equalities/mod.ts"
+import { LengthGuard, MaxLengthGuard, MinLengthGuard } from "@/mods/builtins/lengths/mod.ts"
+import { EitherGuard, ThenGuard } from "@/mods/builtins/logicals/mod.ts"
+import { MaxNumberGuard, MinNumberGuard, NegativeNumberGuard, NonNegativeNumberGuard, NonPositiveNumberGuard, NumberableGuard, NumberGuard, PositiveNumberGuard } from "@/mods/builtins/numbers/mod.ts"
+import { BigIntableGuard, BigIntGuard, BooleanGuard, FunctionGuard, ObjectGuard, SymbolGuard } from "@/mods/builtins/primitives/mod.ts"
+import { RecordGuard } from "@/mods/builtins/records/mod.ts"
+import { HexStringGuard, StringableGuard, StringEndingWithGuard, StringGuard, StringIncludingGuard, StringMatchingGuard, StringStartingWithGuard, ZeroHexStringGuard } from "@/mods/builtins/strings/mod.ts"
+import { Errorer } from "@/mods/builtins/wrappers/mod.ts"
 import { Guard } from "@/mods/guard/mod.ts"
-import { FailGuard, PassGuard } from "@/mods/types/abstracts/mod.ts"
-import { ArrayGuard, ElementsGuard, TupleGuard } from "@/mods/types/arrays/mod.ts"
-import { StrongGuard, WeakGuard } from "@/mods/types/equalities/mod.ts"
-import { LengthGuard, MaxLengthGuard, MinLengthGuard } from "@/mods/types/lengths/mod.ts"
-import { EitherGuard, ThenGuard } from "@/mods/types/logicals/index.ts"
-import { MaxNumberGuard, MinNumberGuard, NegativeNumberGuard, NonNegativeNumberGuard, NonPositiveNumberGuard, NumberableGuard, NumberGuard, PositiveNumberGuard } from "@/mods/types/numbers/index.ts"
-import { BigIntableGuard, BigIntGuard, BooleanGuard, FunctionGuard, ObjectGuard, SymbolGuard } from "@/mods/types/primitives/index.ts"
-import { RecordGuard } from "@/mods/types/records/index.ts"
-import { StringableGuard, StringEndingWithGuard, StringGuard, StringIncludingGuard, StringMatchingGuard, StringStartingWithGuard } from "@/mods/types/strings/index.ts"
-import { Errorer } from "@/mods/wrappers/mod.ts"
 
 export function $error<T extends Guard<any, any>>(guard: T, message?: string) {
   return new Errorer(guard, (cause) => new Error(message, { cause }))
@@ -62,6 +62,14 @@ export namespace $string {
 
   export function matches(value: RegExp, message?: string) {
     return $error(new StringMatchingGuard(value), message)
+  }
+
+  export function hex(message?: string) {
+    return $error(new HexStringGuard(), message)
+  }
+
+  export function zerohex(message?: string) {
+    return $error(new ZeroHexStringGuard(), message)
   }
 
 }
