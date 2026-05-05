@@ -1,6 +1,6 @@
 # Gardien
 
-Type-safe runtime schema validation and parsing
+Runtime schema validation and parsing
 
 ```bash
 npm i @hazae41/gardien
@@ -154,4 +154,18 @@ export class ZeroHexlifyGuard {
 
 ```tsx
 console.log(asOrThrow(ZeroHexlifyGuard, "12345")) // 0x3039
+```
+
+### Variables narrowing
+
+You can use `is` to narrow variables
+
+```tsx
+function f(x: unknown) {
+  if (is($string(), x)) {
+    console.log(x.toUpperCase())
+  } else {
+    console.log("not a string")
+  }
+}
 ```
