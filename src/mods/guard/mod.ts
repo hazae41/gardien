@@ -30,8 +30,7 @@ export function asOrNull<T extends Guard<any, any>>(guard: T, value: Guard.Input
 
 export function is<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): value is Guard.Input<T> & Guard.Output<T> {
   try {
-    guard.asOrThrow(value)
-    return true
+    return guard.asOrThrow(value) === value
   } catch {
     return false
   }

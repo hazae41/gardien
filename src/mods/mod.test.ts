@@ -1,5 +1,5 @@
 import { assert, test } from "@hazae41/phobos";
-import { $either, $length, $number, $numberable, $object, $pass, $record, $string, $strong, asOrThrow, Guard, is } from "./mod.ts";
+import { $either, $length, $number, $object, $pass, $record, $string, $strong, asOrThrow, Guard, is } from "./mod.ts";
 
 test("record string min", async () => {
   const result = is($record({
@@ -52,6 +52,6 @@ test("known rpc", async () => {
 })
 
 test("numberable", async () => {
-  assert(is($numberable().then($number.nonNegative()), "123") === true)
-  assert(is($numberable().then($number.nonNegative()), "0x123") === true)
+  assert(is($number().then($number.nonNegative()), 123) === true)
+  assert(is($number().then($number.nonNegative()), -123) === false)
 })
