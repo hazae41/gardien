@@ -1,6 +1,6 @@
 export class PassGuard<T = unknown> {
 
-  asOrThrow(value: unknown): T {
+  as(value: unknown): T {
     return value as T
   }
 
@@ -8,7 +8,7 @@ export class PassGuard<T = unknown> {
 
 export class FailGuard {
 
-  static asOrThrow(_: unknown): never {
+  static as(_: unknown): never {
     throw new Error()
   }
 

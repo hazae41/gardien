@@ -1,5 +1,5 @@
 import { assert, test } from "@hazae41/phobos";
-import { $either, $length, $number, $object, $pass, $record, $string, $strong, asOrThrow, Guard, is } from "./mod.ts";
+import { $either, $length, $number, $object, $pass, $record, $string, $strong, as, Guard, is } from "./mod.ts";
 
 test("record string min", async () => {
   const result = is($record({
@@ -26,7 +26,7 @@ test("unknown rpc", async () => {
     params: { example: "example" }
   } as const)
 
-  asOrThrow(RpcRequestGuard, JSON.parse(raw) as unknown)
+  as(RpcRequestGuard, JSON.parse(raw) as unknown)
 })
 
 test("known rpc", async () => {
@@ -48,7 +48,7 @@ test("known rpc", async () => {
     example: $string()
   } as const))
 
-  asOrThrow(RpcRequestGuard($strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
+  as(RpcRequestGuard($strong("example"), ExampleParamsGuard), JSON.parse(raw) as unknown)
 })
 
 test("numberable", async () => {

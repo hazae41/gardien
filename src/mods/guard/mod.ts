@@ -1,7 +1,7 @@
 import { Nullable } from "@/libs/nullable/mod.ts";
 
 export interface Guard<I = any, O = any> {
-  asOrThrow(value: I): O
+  as(value: I): O
 }
 
 export namespace Guard {
@@ -16,13 +16,13 @@ export namespace Guard {
 
 }
 
-export function asOrThrow<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): Guard.Output<T> {
-  return guard.asOrThrow(value)
+export function as<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): Guard.Output<T> {
+  return guard.as(value)
 }
 
 export function asOrNull<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): Nullable<Guard.Output<T>> {
   try {
-    return guard.asOrThrow(value)
+    return guard.as(value)
   } catch {
     return null
   }
@@ -30,7 +30,7 @@ export function asOrNull<T extends Guard<any, any>>(guard: T, value: Guard.Input
 
 export function is<T extends Guard<any, any>>(guard: T, value: Guard.Input<T>): value is Guard.Input<T> & Guard.Output<T> {
   try {
-    return guard.asOrThrow(value) === value
+    return guard.as(value) === value
   } catch {
     return false
   }

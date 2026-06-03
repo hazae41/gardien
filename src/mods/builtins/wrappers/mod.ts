@@ -7,8 +7,8 @@ export class Wrapper<T extends Guard<any, any>> {
     readonly guard: T
   ) { }
 
-  asOrThrow(value: Guard.Input<T>): Guard.Output<T> {
-    return this.guard.asOrThrow(value)
+  as(value: Guard.Input<T>): Guard.Output<T> {
+    return this.guard.as(value)
   }
 
   then<U extends Guard<any, any>>(next: U): ThenGuard<T, U> {
@@ -26,9 +26,9 @@ export class Errorer<T extends Guard<any, any>> extends Wrapper<T> {
     super(guard)
   }
 
-  asOrThrow(value: Guard.Input<T>): Guard.Output<T> {
+  as(value: Guard.Input<T>): Guard.Output<T> {
     try {
-      return this.guard.asOrThrow(value)
+      return this.guard.as(value)
     } catch (cause: unknown) {
       throw this.error(cause)
     }

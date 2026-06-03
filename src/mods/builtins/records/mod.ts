@@ -6,11 +6,11 @@ export class RecordGuard<T extends { [k: PropertyKey]: Guard<any, any> }> {
     readonly guard: T
   ) { }
 
-  asOrThrow(value: Guard.AllInput<T>): Guard.AllOutput<T> {
+  as(value: Guard.AllInput<T>): Guard.AllOutput<T> {
     const result: Record<PropertyKey, unknown> = {}
 
     for (const key in this.guard)
-      result[key] = this.guard[key].asOrThrow(value[key])
+      result[key] = this.guard[key].as(value[key])
 
     return result as Guard.AllOutput<T>
   }

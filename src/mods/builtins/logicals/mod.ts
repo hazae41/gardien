@@ -8,8 +8,8 @@ export class ThenGuard<A extends Guard<any, any>, B extends Guard<any, any>> {
     readonly b: B,
   ) { }
 
-  asOrThrow(value: Guard.Input<A>): Guard.Output<B> {
-    return this.b.asOrThrow(this.a.asOrThrow(value))
+  as(value: Guard.Input<A>): Guard.Output<B> {
+    return this.b.as(this.a.as(value))
   }
 
 }
@@ -20,10 +20,10 @@ export class EitherGuard<T extends readonly Guard<any, any>[]> {
     readonly guards: T,
   ) { }
 
-  asOrThrow(value: Inter<Guard.AllInput<T>>): Union<Guard.AllOutput<T>> {
+  as(value: Inter<Guard.AllInput<T>>): Union<Guard.AllOutput<T>> {
     for (const guard of this.guards) {
       try {
-        return guard.asOrThrow(value)
+        return guard.as(value)
       } catch {
         continue
       }

@@ -4,13 +4,13 @@ export class ArrayGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): readonly unknown[] {
+  static as(value: unknown): readonly unknown[] {
     if (!Array.isArray(value))
       throw new Error()
     return value
   }
 
-  asOrThrow(value: unknown): readonly unknown[] {
+  as(value: unknown): readonly unknown[] {
     if (!Array.isArray(value))
       throw new Error()
     return value
@@ -24,8 +24,8 @@ export class ElementsGuard<T extends Guard<any, any>> {
     readonly guard: T
   ) { }
 
-  asOrThrow(value: readonly Guard.Input<T>[]): readonly Guard.Output<T>[] {
-    return value.map(x => this.guard.asOrThrow(x))
+  as(value: readonly Guard.Input<T>[]): readonly Guard.Output<T>[] {
+    return value.map(x => this.guard.as(x))
   }
 
 }
@@ -36,10 +36,10 @@ export class TupleGuard<T extends readonly Guard<any, any>[]> {
     readonly guards: T
   ) { }
 
-  asOrThrow(value: Guard.AllInput<T>): Guard.AllOutput<T> {
+  as(value: Guard.AllInput<T>): Guard.AllOutput<T> {
     if (value.length !== this.guards.length)
       throw new Error()
-    return value.map((x, i) => this.guards[i].asOrThrow(x)) as Guard.AllOutput<T>
+    return value.map((x, i) => this.guards[i].as(x)) as Guard.AllOutput<T>
   }
 
 }

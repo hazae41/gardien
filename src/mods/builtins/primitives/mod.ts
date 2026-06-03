@@ -2,13 +2,13 @@ export class BooleanGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): boolean {
+  static as(value: unknown): boolean {
     if (typeof value !== "boolean")
       throw new Error()
     return value
   }
 
-  asOrThrow(value: unknown): boolean {
+  as(value: unknown): boolean {
     if (typeof value !== "boolean")
       throw new Error()
     return value
@@ -20,13 +20,13 @@ export class BigIntGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): bigint {
+  static as(value: unknown): bigint {
     if (typeof value !== "bigint")
       throw new Error()
     return value
   }
 
-  asOrThrow(value: unknown): bigint {
+  as(value: unknown): bigint {
     if (typeof value !== "bigint")
       throw new Error()
     return value
@@ -38,11 +38,11 @@ export class BigIntableGuard {
 
   constructor() { }
 
-  static asOrThrow(value: string | number | bigint | boolean): bigint {
+  static as(value: string | number | bigint | boolean): bigint {
     return BigInt(value)
   }
 
-  asOrThrow(value: string | number | bigint | boolean): bigint {
+  as(value: string | number | bigint | boolean): bigint {
     return BigInt(value)
   }
 
@@ -52,7 +52,7 @@ export class ObjectGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): object {
+  static as(value: unknown): object {
     if (typeof value !== "object")
       throw new Error()
     if (value === null)
@@ -60,7 +60,7 @@ export class ObjectGuard {
     return value
   }
 
-  asOrThrow(value: unknown): object {
+  as(value: unknown): object {
     if (typeof value !== "object")
       throw new Error()
     if (value === null)
@@ -74,13 +74,13 @@ export class FunctionGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): Function {
+  static as(value: unknown): Function {
     if (typeof value !== "function")
       throw new Error()
     return value
   }
 
-  asOrThrow(value: unknown): Function {
+  as(value: unknown): Function {
     if (typeof value !== "function")
       throw new Error()
     return value
@@ -92,13 +92,13 @@ export class SymbolGuard {
 
   constructor() { }
 
-  static asOrThrow(value: unknown): symbol {
+  static as(value: unknown): symbol {
     if (typeof value !== "symbol")
       throw new Error()
     return value
   }
 
-  asOrThrow(value: unknown): symbol {
+  as(value: unknown): symbol {
     if (typeof value !== "symbol")
       throw new Error()
     return value

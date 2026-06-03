@@ -24,9 +24,9 @@ npm i @hazae41/gardien
 We can parse something as a number and then validate it
 
 ```typescript
-import { asOrThrow, $numberable, $number } from "@hazae41/gardien"
+import { as, $numberable, $number } from "@hazae41/gardien"
 
-const value = asOrThrow($numberable().then($number.nonNegative()), "0x123")
+const value = as($numberable().then($number.nonNegative()), "0x123")
 ```
 
 This is like
@@ -43,9 +43,9 @@ return value
 ### Validating a string with an error message
 
 ```typescript
-import { asOrThrow, $string } from "@hazae41/gardien"
+import { as, $string } from "@hazae41/gardien"
 
-asOrThrow($string().then($length.minmax(6, 24, "Password must be between 6 and 24 characters")), password)
+as($string().then($length.minmax(6, 24, "Password must be between 6 and 24 characters")), password)
 ```
 
 This is like
@@ -70,7 +70,7 @@ const RpcRequestGuard = $object().then($record({
 } as const))
 
 function onMessage(message: string) {
-  const request = asOrThrow(RpcRequestGuard, JSON.parse(message) as unknown)
+  const request = as(RpcRequestGuard, JSON.parse(message) as unknown)
 
   if (request.method === "example")
     return void example(request)
@@ -97,7 +97,7 @@ const ExampleRequestGuard = RpcRequestGuard($strong("example"), $object().then($
   example: $string()
 } as const)))
 
-const request = asOrThrow(ExampleRequestGuard, JSON.parse(message) as unknown)
+const request = as(ExampleRequestGuard, JSON.parse(message) as unknown)
 ```
 
 ### Validating with your own logic
@@ -106,14 +106,14 @@ Make your own guard
 
 ```tsx
 export interface Guard<I = any, O = any> {
-  asOrThrow(value: I): O
+  as(value: I): O
 }
 ```
 
 ```tsx
 export class IPv4Guard {
 
-  static asOrThrow(value: string): string {
+  static as(value: string): string {
     if (!/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(value))
       throw new Error()
     return value
@@ -135,7 +135,7 @@ export function $ipv4(message?: string) {
 Then use it as you wish
 
 ```tsx
-asOrThrow($string().then($ipv4("This is not an IPv4 address")), input)
+as($string().then($ipv4("This is not an IPv4 address")), input)
 ```
 
 ### Parsing with your own logic
@@ -145,7 +145,7 @@ You can parse and transform with your own logic
 ```tsx
 export class ZeroHexlifyGuard {
 
-  static asOrThrow(value: any): `0x${string}` {
+  static as(value: any): `0x${string}` {
     return `0x${BigInt(value).toString(16)}`
   }
 
@@ -153,7 +153,7 @@ export class ZeroHexlifyGuard {
 ```
 
 ```tsx
-console.log(asOrThrow(ZeroHexlifyGuard, "12345")) // 0x3039
+console.log(as(ZeroHexlifyGuard, "12345")) // 0x3039
 ```
 
 ### Variables narrowing
